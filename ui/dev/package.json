@@ -18,6 +18,7 @@
     "copy-anything": "^1.5.1",
     "is-what": "^3.4.0",
     "merge-anything": "^2.4.3",
+    "quasar-ui-easy-forms": "^0.10.2",
     "sort-anything": "^0.1.0"
   },
   "devDependencies": {
