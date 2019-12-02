@@ -98,7 +98,7 @@ import { EfBtn, EasyForm } from 'quasar-ui-easy-forms'
 import EasyRow from './EasyRow.vue'
 import EasyCell from './EasyCell.vue'
 import schemaToQuasarColumns from '../helpers/schemaToQuasarColumns.js'
-import defaultLang from '../meta/easyTableLang.js'
+import defaultLang from '../meta/lang.js'
 
 export default {
   name: 'EasyTable',
@@ -175,6 +175,7 @@ Please note:
     }
   },
   watch: {
+    grid (newValue) { this.innerGrid = newValue },
     selected (newValue) { this.innerSelected = newValue },
   },
   computed: {

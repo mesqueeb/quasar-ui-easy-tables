@@ -46,6 +46,7 @@ export const pageForm = {
     {
       fieldType: 'markdown',
       src: description,
+      noContainer: true,
     },
   ]
 }

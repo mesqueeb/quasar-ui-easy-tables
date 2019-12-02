@@ -1,5 +1,5 @@
 <template>
-  <div class="tabs-panel-css q-pa-md">
+  <div class="tabs-panel-style q-pa-md">
     <EasyForm
       :schema="schema"
       :action-buttons="['edit', 'cancel', 'save']"
@@ -11,7 +11,7 @@
 <style lang="stylus" scoped>
 // $
 
-// .tabs-panel-css
+// .tabs-panel-style
 
 </style>
 
@@ -22,15 +22,15 @@ import { dom } from 'quasar'
 const { css: applyCss } = dom
 
 export default {
-  name: pascalCase('tabs-panel-css'),
+  name: pascalCase('tabs-panel-style'),
   props: {
-    defaultClasses: {
+    classes: {
       type: Array,
       desc: 'An array of classes to show in the textarea. These classes will be targeted in the dom to apply the custom css typed in the textarea.',
     },
-    defaultStyle: {
+    classesData: {
       type: Object,
-      desc: 'An object with classes (passed in defaultClasses) as keys and an object as value that has the default styles to add to this class',
+      desc: 'An object with classes as keys and an object as value that has the default styles to add to this class',
     },
     targetWrapperElementSelector: {
       type: String,
@@ -38,9 +38,9 @@ export default {
     },
   },
   data () {
-    const { defaultClasses, defaultStyle } = this
-    const cssDefaultBody = defaultClasses.map(targetClass => {
-      const styleObject = defaultStyle[targetClass]
+    const { classes, classesData } = this
+    const cssDefaultBody = classes.map(targetClass => {
+      const styleObject = classesData[targetClass]
       const cssBody = !styleObject
         ? '  '
         : Object.entries(styleObject)
@@ -53,6 +53,7 @@ export default {
         id: 'css',
         label: 'Because of the limitations of this preview, do not nest your sass via indentation.',
         subLabel: '`<style lang="sass">`',
+        hasMarkdown: true,
         fieldType: 'input',
         type: 'textarea',
         default: cssDefaultBody,
@@ -62,6 +63,7 @@ export default {
       },
       {
         subLabel: '`</style>`',
+        hasMarkdown: true,
       },
     ]
     return { schema }

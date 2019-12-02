@@ -15,12 +15,15 @@
         no-caps
       >
         <q-tab
-          v-for="panel in Object.values(settingsSchemaPerCategory)"
+          v-for="panel in Object.values(schemaPerCategory)"
           :key="panel.name"
           :name="panel.name"
-          :label="panel.name[0].toUpperCase() + panel.name.slice(1)"
-          class="tabs-panel-props__left-tab"
-        />
+        >
+          <div class="row no-wrap items-center justify-between full-width">
+            <span class="q-mr-xs text-weight-medium">{{ pascalCase(panel.name) }}</span>
+            <q-badge>{{ panel.schema.length }}</q-badge>
+          </div>
+        </q-tab>
       </q-tabs>
     </template>
 
@@ -32,13 +35,13 @@
         transition-next="slide-up"
       >
         <q-tab-panel
-          v-for="panel in Object.values(settingsSchemaPerCategory)"
+          v-for="panel in Object.values(schemaPerCategory)"
           :key="panel.name"
           :name="panel.name"
           class="q-pa-none q-pt-md"
         >
           <div
-            v-if="tag === 'EasyField' && panel.name !== 'easyFormProp'"
+            v-if="panel.schema.find(blueprint => blueprint.inheritedProp)"
             class="q-pa-md flex flex-center q-gutter-md"
           >
             <div class="flex">
@@ -46,29 +49,23 @@
               <div class="_legend q-pl-xs">EasyField prop</div>
             </div>
             <div class="flex">
-              <div class="_box" style="background: lavender"></div>
-              <div class="_legend q-pl-xs">Quasar prop (with modified behavior)</div>
+              <div class="_box inherited-prop-modified"></div>
+              <div class="_legend q-pl-xs">inherited prop (from the wrapped component - with modified behavior)</div>
             </div>
             <div class="flex">
-              <div class="_box" style="background: whitesmoke"></div>
-              <div class="_legend q-pl-xs">Quasar prop (regular)</div>
+              <div class="_box inherited-prop"></div>
+              <div class="_legend q-pl-xs">inherited prop (from the wrapped component)</div>
             </div>
           </div>
-          <q-markdown
-            v-if="tag === 'EasyField' && panel.name === 'easyFormProp'"
-            class="q-pa-md"
-          >These props are accessible in the `context` of the Function of any Evaluated Prop.
-When using EasyField as standalone these props don't exist, but you can still pass them manually if you want to use them in Evaluated Props.
-Read more on Evaluated Props on its dedicade page.</q-markdown>
           <EasyForm
             :value="value"
             @field-input="updateSettings"
             grid-gap="0"
             :action-buttons="[]"
-            :column-count="2"
+            :column-count="1"
             mode="edit"
             :schema="panel.schema"
-            class="q-mb-lg"
+            class="q-pb-lg"
           />
         </q-tab-panel>
       </q-tab-panels>
@@ -79,10 +76,31 @@ Read more on Evaluated Props on its dedicade page.</q-markdown>
 <style lang="sass">
 
 .tabs-panel-props
+  .inherited-prop
+    background: whitesmoke
+  .inherited-prop-modified
+    background: lavender
+  .q-tab__content
+    width: 100%
   ._box
     border: thin solid lightgrey
     width: 30px
     height: 20px
+  .easy-field
+    grid-template-areas: "label sub-label" "label field"
+    grid-template-columns: 150px 1fr
+    grid-gap: 6px
+    padding: 1em
+  .easy-field__label
+    background: $accent
+    color: white
+    justify-self: start
+    align-self: start
+    padding: 1px 4px
+    border-radius: 4px
+    margin-bottom: 4px
+  .q-markdown p
+    margin: 0 !important
 
 </style>
 
@@ -96,43 +114,44 @@ import { pascalCase } from 'case-anything'
 export default {
   name: pascalCase('tabs-panel-props'),
   props: {
-    tag: {
-      type: String,
-      validator: prop => ['EasyField', 'EasyForm'].includes(prop),
-      values: ['EasyField', 'EasyForm'],
-      examples: [`'EasyField'`, `'EasyForm'`],
-    },
     value: Object,
-    settingsSchema: [Array, Object],
+    propsSchema: [Array, Object],
   },
   data () {
     return {
       tabControl: 'model',
-      splitterModel: 12,
+      splitterModel: 15,
     }
   },
   computed: {
-    settingsSchemaPerCategory () {
-      const { settingsSchema } = this
-      const schema = (!isArray(settingsSchema)) ? Object.values(settingsSchema) : settingsSchema
+    schemaPerCategory () {
+      const { propsSchema } = this
+      const schema = (!isArray(propsSchema)) ? Object.values(propsSchema) : propsSchema
       const perCat = schema.reduce((carry, blueprint) => {
-        const { category, quasarProp } = blueprint
+        const { category, inheritedProp, fieldClasses } = blueprint
+        // If it's an inheritedProp, add a specific indentifier
+        if (inheritedProp) {
+          fieldClasses.push(inheritedProp === true ? 'inherited-prop' : 'inherited-prop-modified')
+        }
         if (!category) return carry
         const categoryArray = category.split('|')
         categoryArray.forEach(c => {
           if (!carry[c]) carry[c] = {schema: [], name: c}
-          if (quasarProp === undefined) blueprint.quasarProp = '_'
+          blueprint.sortFieldsOnInheritedOrNot = (inheritedProp === undefined)
+            ? '_'
+            : inheritedProp
           carry[c].schema.push(blueprint)
         })
         return carry
       }, {})
       Object.entries(perCat).forEach(([catKey, {schema}]) => {
-        perCat[catKey].schema = sort(schema).by('quasarProp')
+        perCat[catKey].schema = sort(schema).by('sortFieldsOnInheritedOrNot')
       })
       return perCat
     },
   },
   methods: {
+    pascalCase,
     updateSettings ({id, value}) {
       const settings = copy(this.value)
       settings[id] = value
