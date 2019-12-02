@@ -9,11 +9,9 @@
 
 <script>
 import parseCodeForPrint from '../../helpers/parseCodeForPrint.js'
-import { QMarkdown } from '@quasar/quasar-ui-qmarkdown'
 
 export default {
   name: 'MarkdownCode',
-  components: { QMarkdown },
   props: {
     prefix: {
       desc: 'could be `export default`; `const myObj = `; `<template/>` etc.',

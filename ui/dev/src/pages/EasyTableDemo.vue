@@ -7,11 +7,12 @@
     />
     <InfoCard
       class="q-mt-lg"
-      tag-name="EasyForm"
+      tag-name="EasyTable"
       :title="infoCardTitle"
       :prop-data.sync="exampleTables[pageValue.chosenExample]"
       :props-schema="propsSchema"
       :style-classes="styleClasses"
+      :props-separate-tab="['schemaColumns', 'schemaGrid', 'rows']"
     >
       <EasyTable
         class="q-pa-md"
