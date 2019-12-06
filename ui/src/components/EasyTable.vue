@@ -106,8 +106,24 @@ export default {
   components: { QTable, QTd, QCheckbox, QCard, EfBtn, EasyForm, EasyRow, EasyCell },
   desc: `EasyForms is a peer dependency!`,
   props: {
-    title: { type: String },
+    // EasyTable props:
+    schemaColumns: {
+      category: 'column',
+      type: Array,
+      desc: 'The schema for the columns you want to generate, in the same format as an EasyForm schema.',
+    },
+    schemaGrid: {
+      category: 'column',
+      type: [Array, Object],
+      desc: 'The schema for the grid cards you want to generate, in the same format as an EasyForm schema.',
+    },
+    rows: {
+      category: 'general',
+      desc: 'Rows of data to display. Use `rows` instead of the QTables `data`. Renamed for clarity.',
+      type: Array,
+    },
     actionButtons: {
+      category: 'content',
       type: Array,
       default: () => ['grid'],
       desc: `Action buttons to add to the table. These can be pre-set buttons you can add by passing a string, or custom ones by passing an object with {label, handler}.
@@ -118,16 +134,8 @@ Preset buttons include:
 - 'selection:duplicate' (this just does \`$emit('duplicate', selectionArray)\`, you must implement your own logic.`,
       examples: [`['add', 'grid', {btnLabel: 'do it', events: {click: console.log}}]`],
     },
-    rows: { type: Array },
-    schemaColumns: {
-      type: Array,
-      desc: 'The schema for the columns you want to generate, in the same format as an EasyForm schema.',
-    },
-    schemaGrid: {
-      type: [Array, Object],
-      desc: 'The schema for the grid cards you want to generate, in the same format as an EasyForm schema.',
-    },
     gridEasyFormOptions: {
+      category: 'column',
       type: Object,
       default: () => ({}),
       desc: `The EasyForm options you want to use for the grid cards.
@@ -152,12 +160,37 @@ Please note:
       category: 'style',
       desc: 'Check the description at EasyRow.vue',
     },
+    // Inherited props used here:
     grid: {
-      category: 'style|behavior',
+      inheritedProp: true,
       type: Boolean,
       default: false,
     },
-    selected: { type: Array, default: () => [] },
+    selected: {
+      inheritedProp: true,
+      type: Array,
+      default: () => []
+    },
+    // Inherited props with different defaults:
+    // Modified inherited props:
+    data: {
+      inheritedProp: 'modified',
+      desc: 'Use `rows` instead of the QTables `data`. Renamed for clarity.',
+      type: Array,
+    },
+    columns: {
+      inheritedProp: 'modified',
+      desc: 'Do not use this! Use `schemaColumns` instead. This is the prop QTable uses to define its columns. EasyTable uses `schemaColumns` instead.',
+    },
+    title: {
+      inheritedProp: 'modified',
+      desc: 'A title to be placed above your table.',
+      type: String,
+    },
+    rowKey: {
+      inheritedProp: 'modified',
+      desc: 'This is fixed to `id` in an EasyTable and cannot be changed.',
+    },
   },
   data () {
     const { lang, grid, selected } = this
