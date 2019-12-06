@@ -23,7 +23,7 @@
           :id="rowProps.row.id"
           :row-style="rowStyle"
           :row-classes="rowClasses"
-          mode="view"
+          mode="raw"
           @row-input="({rowId, fieldId, value}) => onInputCell(rowId, fieldId, value)"
           v-slot="EasyFormSimulatedContext"
         >
@@ -54,7 +54,6 @@
           @click="clickRow(gridItemProps.row.id)"
         >
           <EasyForm
-            :schema="schemaGrid"
             :value="gridItemProps.row"
             :id="gridItemProps.row.id"
             v-bind="gridEasyFormProps"
@@ -115,12 +114,12 @@ export default {
     schemaColumns: {
       category: 'column',
       type: Array,
-      desc: 'The schema for the columns you want to generate, in the same format as an EasyForm schema.',
+      desc: 'The schema for the columns you want to generate. (EasyForm schema format)',
     },
     schemaGrid: {
       category: 'column',
       type: [Array, Object],
-      desc: 'The schema for the grid cards you want to generate, in the same format as an EasyForm schema.',
+      desc: 'The schema for the grid cards you want to generate. (EasyForm schema format)',
     },
     rows: {
       category: 'general',
@@ -147,7 +146,8 @@ Preset buttons include:
 Please note:
 - The 'schema' should be set via the 'schemaGrid' prop.
 - 'value' and 'id' are set automatically.
-- 'actionButtons' is \`[]\` by default, but can be overwritten.
+- These are the default values, but they can be overridden:
+  \`{ actionButtons: [] }\`
 - See the documentation of EasyForm for more information on available props.`,
     },
     lang: {
@@ -231,9 +231,11 @@ Please note:
       })
     },
     gridEasyFormProps () {
-      const { gridEasyFormOptions } = this
+      const { gridEasyFormOptions, schemaGrid } = this
       const defaults = {
         actionButtons: [],
+        mode: 'raw',
+        schema: schemaGrid,
       }
       return merge(defaults, gridEasyFormOptions)
     },

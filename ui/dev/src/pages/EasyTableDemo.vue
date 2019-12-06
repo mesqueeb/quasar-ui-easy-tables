@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page class="easy-table-demo" padding>
     <EasyForm
       class="page-form"
       v-model="pageValue"
@@ -12,6 +12,7 @@
       :prop-data.sync="exampleTables[pageValue.chosenExample]"
       :props-schema="propsSchema"
       :style-classes="styleClasses"
+      :style-classes-data="styleClassesData"
       :props-separate-tab="['schemaColumns', 'schemaGrid', 'rows']"
     >
       <EasyTable
@@ -23,7 +24,11 @@
   </q-page>
 </template>
 
-<style lang="sass" scoped>
+<style lang="sass">
+
+.easy-table-demo
+  .easy-field__label
+    font-weight: 100
 
 </style>
 
@@ -57,19 +62,25 @@ export default {
     const { pageForm, exampleTables } = demoSchemas[this.schemaId]
     // const settingsSchema = getInfoCardSchema('EasyTable')
     const styleClasses = [
-      'easy-table',
-      'easy-table__nav-row',
-      'easy-table__table',
-      'easy-table__grid-item',
-      'easy-row',
-      'easy-cell',
+      '.easy-table',
+      '.easy-table__nav-row',
+      '.easy-table__table',
+      '.easy-table__grid-item',
+      '.easy-row',
+      '.easy-cell',
+      '.easy-field',
+      '.easy-field__label',
     ]
+    const styleClassesData = {
+      '.easy-field__label': {'font-weight': 100}
+    }
     const propsSchema = getInfoCardPropsSchema(rawProps)
     return {
       pageValue: { chosenExample: 0 },
       pageForm,
       exampleTables: exampleTables.map(f => merge({value: {}}, f)),
       styleClasses,
+      styleClassesData,
       propsSchema,
     }
   },

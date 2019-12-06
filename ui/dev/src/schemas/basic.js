@@ -14,12 +14,11 @@ export const exampleTables = [
   {
     title: 'My Lessons',
     rows: [
-      {title: 'Mathematica', topic: 'Maths', subject: 'We will look at the Mathematica of the Maths √/%^×-+÷'},
-      {title: 'Mathematica', topic: 'Maths', subject: 'We will look at the Mathematica of the Maths √/%^×-+÷'},
-      {title: 'Mathematica', topic: 'Maths', subject: 'We will look at the Mathematica of the Maths √/%^×-+÷'},
-      {title: 'Mathematica', topic: 'Maths', subject: 'We will look at the Mathematica of the Maths √/%^×-+÷'},
-      {title: 'Mathematica', topic: 'Maths', subject: 'We will look at the Mathematica of the Maths √/%^×-+÷'},
-      {title: 'Mathematica', topic: 'Maths', subject: 'We will look at the Mathematica of the Maths √/%^×-+÷'},
+      {title: 'Mathematica', topic: 'Maths', subject: 'We will look at the Mathematica of the Maths √/%^×-+÷', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=160', grade: 90000, passing: true},
+      {title: 'Mathematica', topic: 'Maths', subject: 'We will look at the Mathematica of the Maths √/%^×-+÷', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=160', grade: 90000, passing: false},
+      {title: 'Mathematica', topic: 'Maths', subject: 'We will look at the Mathematica of the Maths √/%^×-+÷', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=160', grade: 90000, passing: true},
+      {title: 'Mathematica', topic: 'Maths', subject: 'We will look at the Mathematica of the Maths √/%^×-+÷', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=160', grade: 90000, passing: true},
+      {title: 'Mathematica', topic: 'Maths', subject: 'We will look at the Mathematica of the Maths √/%^×-+÷', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=160', grade: 90000, passing: true},
     ],
     schemaColumns: [
       {
@@ -40,9 +39,25 @@ export const exampleTables = [
         fieldType: 'input',
         valueType: 'string',
       },
+      {
+        id: 'img',
+        label: 'Image',
+        fieldType: 'img',
+      },
+      {
+        id: 'grade',
+        label: 'Grade',
+        fieldType: 'input',
+        valueType: 'number',
+      },
+      {
+        id: 'passing',
+        label: 'Passing',
+        fieldType: 'toggle',
+        valueType: 'boolean',
+      },
     ],
     get schemaGrid () { return this.schemaColumns },
-    gridEasyFormOptions: {},
   }
 ]
 
