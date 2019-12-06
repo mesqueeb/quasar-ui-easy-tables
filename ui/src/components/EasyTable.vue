@@ -48,7 +48,11 @@
       </template>
       <!-- Grid item -->
       <template v-slot:item="gridItemProps">
-        <q-card class="easy-table__grid-item">
+        <q-card
+          :class="flattenArray(['easy-table__grid-item', cardClass])"
+          :style="cardStyle"
+          @click="clickRow(gridItemProps.row.id)"
+        >
           <EasyForm
             :schema="schemaGrid"
             :value="gridItemProps.row"
@@ -92,6 +96,7 @@
 <script>
 import pathToProp from 'path-to-prop'
 import merge from 'merge-anything'
+import { flattenArray } from 'flatten-anything'
 import { isPlainObject, isFunction } from 'is-what'
 import { QTable, QTd, QCheckbox, QCard } from 'quasar'
 import { EfBtn, EasyForm } from 'quasar-ui-easy-forms'
@@ -152,11 +157,11 @@ Please note:
       default: () => defaultLang,
       examples: [`{cancel: 'キャンセル', edit: '編集', save: '保存'}`],
     },
-    rowStyle: {
+    rowClasses: {
       category: 'style',
       desc: 'Check the description at EasyRow.vue',
     },
-    rowClasses: {
+    rowStyle: {
       category: 'style',
       desc: 'Check the description at EasyRow.vue',
     },
@@ -171,6 +176,8 @@ Please note:
       type: Array,
       default: () => []
     },
+    cardClass: { inheritedProp: true },
+    cardStyle: { inheritedProp: true },
     // Inherited props with different defaults:
     // Modified inherited props:
     data: {
@@ -277,6 +284,7 @@ Please note:
     },
   },
   methods: {
+    flattenArray,
     pathToProp,
     merge,
     enableGrid () {

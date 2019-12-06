@@ -1,6 +1,6 @@
 {
   "name": "quasar-ui-easy-tables",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Luca Ban - Mesqueeb",
   "description": "A Vue plugin (that uses Quasar components) to easily generate tables by only defining a \"schema\" object.",
   "license": "MIT",
@@ -49,6 +49,7 @@
   "dependencies": {
     "commafy-anything": "^1.1.1",
     "copy-anything": "^1.5.1",
+    "flatten-anything": "^1.4.1",
     "is-what": "^3.4.0",
     "merge-anything": "^2.4.3",
     "nestify-anything": "0.0.0",
