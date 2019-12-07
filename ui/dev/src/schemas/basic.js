@@ -14,11 +14,11 @@ export const exampleTables = [
   {
     title: 'My Lessons',
     rows: [
-      {title: 'Mathematica', topic: 'Maths', subject: 'We will look at the Mathematica of the Maths √/%^×-+÷', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=160', grade: 90000, passing: true},
-      {title: 'Mathematica', topic: 'Maths', subject: 'We will look at the Mathematica of the Maths √/%^×-+÷', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=160', grade: 90000, passing: false},
-      {title: 'Mathematica', topic: 'Maths', subject: 'We will look at the Mathematica of the Maths √/%^×-+÷', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=160', grade: 90000, passing: true},
-      {title: 'Mathematica', topic: 'Maths', subject: 'We will look at the Mathematica of the Maths √/%^×-+÷', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=160', grade: 90000, passing: true},
-      {title: 'Mathematica', topic: 'Maths', subject: 'We will look at the Mathematica of the Maths √/%^×-+÷', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=160', grade: 90000, passing: true},
+      {title: 'Mathematica', topic: 'Maths', subject: 'We will look at the Mathematica of the Maths √/%^×-+÷', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=160', grade: 90000, passing: true, created: new Date(), classes: {'1': 'One'}},
+      {title: 'Mathematica', topic: 'Maths', subject: 'We will look at the Mathematica of the Maths √/%^×-+÷', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=160', grade: 90000, passing: false, created: new Date(), classes: {'1': 'One'}},
+      {title: 'Mathematica', topic: 'Maths', subject: 'We will look at the Mathematica of the Maths √/%^×-+÷', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=160', grade: 90000, passing: true, created: new Date(), classes: {'1': 'One'}},
+      {title: 'Mathematica', topic: 'Maths', subject: 'We will look at the Mathematica of the Maths √/%^×-+÷', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=160', grade: 90000, passing: true, created: new Date(), classes: {'1': 'One'}},
+      {title: 'Mathematica', topic: 'Maths', subject: 'We will look at the Mathematica of the Maths √/%^×-+÷', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=160', grade: 90000, passing: true, created: new Date(), classes: {'1': 'One'}},
     ],
     schemaColumns: [
       {
@@ -55,6 +55,24 @@ export const exampleTables = [
         label: 'Passing',
         fieldType: 'toggle',
         valueType: 'boolean',
+      },
+      {
+        id: 'created',
+        label: 'Created at',
+        fieldType: 'input-date',
+        valueType: 'date',
+      },
+      {
+        id: 'classes',
+        label: 'Classes',
+        fieldType: 'select',
+        multiple: true,
+        valueType: 'object',
+        options: [
+          {label: 'One', value: '1'},
+          {label: 'Two', value: '2'},
+          {label: 'Three', value: '3'},
+        ],
       },
     ],
     get schemaGrid () { return this.schemaColumns },

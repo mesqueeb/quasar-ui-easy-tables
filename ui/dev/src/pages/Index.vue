@@ -66,6 +66,7 @@
 <script>
 const pagesEasyTable = [
   {title: 'Basic', path: '/basic'},
+  {title: 'Editing', path: '/editing'},
 ]
 
 export default {

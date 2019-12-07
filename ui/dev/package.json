@@ -22,13 +22,12 @@
     "is-what": "^3.4.0",
     "merge-anything": "^2.4.3",
     "quasar-ui-component-info-card": "0.0.2",
-    "quasar-ui-easy-forms": "^0.10.7",
+    "quasar-ui-easy-forms": "^0.10.8",
     "sort-anything": "^0.1.0"
   },
   "devDependencies": {
     "@quasar/app": "^1.1.0",
-    "@quasar/quasar-app-extension-qmarkdown": "^1.0.6",
-    "quasar-app-extension-easy-forms": "^0.10.3"
+    "@quasar/quasar-app-extension-qmarkdown": "^1.0.6"
   },
   "engines": {
     "node": ">= 8.9.0",

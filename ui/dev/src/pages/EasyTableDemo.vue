@@ -16,9 +16,10 @@
       :props-separate-tab="['schemaColumns', 'schemaGrid', 'rows']"
     >
       <EasyTable
-        class="q-pa-md"
+        class="q-pa-md _interactive-preview"
         :key="pageValue.chosenExample"
         v-bind="exampleTables[pageValue.chosenExample]"
+        v-on="exampleTables[pageValue.chosenExample].events"
       />
     </InfoCard>
   </q-page>
@@ -27,8 +28,13 @@
 <style lang="sass">
 
 .easy-table-demo
-  .easy-field__label
+  ._interactive-preview .easy-field__label
     font-weight: 100
+
+.page-form
+  .ef-btn-toggle
+    border: solid 2px $primary
+    border-radius: 6px
 
 </style>
 
