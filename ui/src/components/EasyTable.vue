@@ -16,6 +16,12 @@
       :pagination.sync="tablePagination"
     >
       <template v-slot:body="rowProps">
+        <!--
+          EasyRow.vue's only purpose is:
+          (1) to create `EasyFormSimulatedContext`
+          (2) to set up the fieldInput (@row-input) listener
+          (3) add row classes; style and their respective props
+        -->
         <EasyRow
           :q-table-row-props="rowProps"
           :schema="schemaColumns"
@@ -24,6 +30,7 @@
           :row-style="rowStyle"
           :row-classes="rowClasses"
           mode="raw"
+
           @row-input="({rowId, fieldId, value}) => onInputCell(rowId, fieldId, value)"
           v-slot="EasyFormSimulatedContext"
         >
@@ -35,7 +42,7 @@
             v-for="blueprint in schemaColumns"
             :key="blueprint.id"
             :props="rowProps"
-            @click.native="clickRow(rowProps.row.id)"
+            @click.native="e => onRowClick(e, rowProps.row)"
           >
             <!-- requires row, blueprint, value -->
             <EasyCell
@@ -51,7 +58,7 @@
         <q-card
           :class="flattenArray(['easy-table__grid-item', cardClass])"
           :style="cardStyle"
-          @click="clickRow(gridItemProps.row.id)"
+          @click="e => onRowClick(e, gridItemProps.row)"
         >
           <EasyForm
             :value="gridItemProps.row"
@@ -297,7 +304,7 @@ Please note:
     },
     tapAdd () { this.$emit('add') },
     tapDuplicate () { this.$emit('duplicate', this.cSelected) },
-    clickRow (rowId) { this.$emit('click-row', rowId) },
+    onRowClick (event, rowData) { this.$emit('row-click', event, rowData) },
     onInputCell (rowId, colId, value) { this.$emit('input-cell', {rowId, colId, value}) },
   }
 }
