@@ -7,7 +7,6 @@
       v-if="fieldType"
       v-model="cValue"
       v-bind="cPropsToPass"
-      v-on="cEvents"
     />
     <div
       v-else
@@ -25,7 +24,7 @@
 import { isArray, isPlainObject, isFunction, isString, isAnyObject } from 'is-what'
 import commafy from 'commafy-anything'
 import merge from 'merge-anything'
-import { EfImg, EasyField, EfBtn } from 'quasar-ui-easy-forms'
+import { EasyField } from 'quasar-ui-easy-forms'
 import { dateStamp } from '../helpers/dateHelpers'
 
 function resolveEasyFieldProp (propValue, componentValue, component) {
@@ -36,7 +35,7 @@ function resolveEasyFieldProp (propValue, componentValue, component) {
 
 export default {
   name: 'EasyCell',
-  components: { EfImg, EasyField, EfBtn },
+  components: { EasyField },
   props: {
     value: {
       type: undefined,
@@ -78,6 +77,7 @@ export default {
           label: null,
           subLabel: null,
           // EasyForm & EasyField props from props of EasyCell ↑:
+          events: this.events,
           fieldType: this.fieldType,
           formDataNested: this.formDataNested,
           formDataFlat: this.formDataFlat,
@@ -94,18 +94,6 @@ export default {
         $router: this.$router,
         $q: this.$q,
       })
-    },
-    cEvents () {
-      const { events, easyFieldSimulatedContext } = this
-      return Object.entries(events)
-        .reduce((carry, [eventName, eventFn]) => {
-          carry[eventName] = e => {
-            if (e && isAnyObject(e) && isFunction(e.stopPropagation)) e.stopPropagation()
-            window.easyFieldSimulatedContext = easyFieldSimulatedContext
-            eventFn(e, easyFieldSimulatedContext)
-          }
-          return carry
-        }, {})
     },
     cCellStyle () {
       const { cellStyle, cValue, easyFieldSimulatedContext } = this
