@@ -1,7 +1,6 @@
 import { isArray, isUndefined, isFunction } from 'is-what'
 import copy from 'copy-anything'
 import merge from 'merge-anything'
-import EasyForms from 'ui'
 import { stringToJs } from './conversion'
 
 export function propToPropSchema (propKey, propInfo) {
@@ -79,21 +78,4 @@ export function propToPropSchema (propKey, propInfo) {
     // defaults
     hasMarkdown: true,
   }
-}
-
-export function getInfoCardPropsSchema (selectedField) {
-  const allComponentProps = selectedField === 'EasyForm'
-    ? copy(EasyForms['EasyForm'].props)
-    : getAllComponentProps(selectedField)
-  return Object.entries(allComponentProps)
-    .reduce((carry, [propKey, propInfo]) => {
-      // fields to not include in the InfoCard settings:
-      if (
-        propKey === 'fieldType'
-      ) {
-        return carry
-      }
-      carry[propKey] = propToPropSchema(propKey, propInfo)
-      return carry
-    }, {})
 }

@@ -13,6 +13,7 @@ Check the [Vue component README](../ui) for more info.
 
 ```bash
 quasar ext add easy-tables
+quasar ext add easy-forms # peer dependency
 ```
 Quasar CLI will retrieve it from NPM and install the extension.
 
