@@ -24,7 +24,7 @@
   "bugs": "https://github.com/mesqueeb/quasar-ui-easy-tables/issues",
   "homepage": "https://quasar-easy-tables.web.app",
   "peerDependencies": {
-    "quasar-ui-easy-forms": "^0.10.7"
+    "quasar-ui-easy-forms": "^0.10.12"
   },
   "devDependencies": {
     "@rollup/plugin-buble": "^0.20.0",
@@ -33,7 +33,7 @@
     "fs-extra": "^8.1.0",
     "open": "^6.4.0",
     "quasar": "^1.0.0",
-    "quasar-ui-easy-forms": "^0.10.7",
+    "quasar-ui-easy-forms": "^0.10.12",
     "rimraf": "^3.0.0",
     "rollup": "^1.21.3",
     "rollup-plugin-commonjs": "^10.1.0",
