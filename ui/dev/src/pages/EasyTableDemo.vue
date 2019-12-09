@@ -70,6 +70,7 @@ export default {
     const styleClasses = [
       '.easy-table',
       '.easy-table__nav-row',
+      '.easy-table__title',
       '.easy-table__table',
       '.easy-table__grid-item',
       '.easy-row',

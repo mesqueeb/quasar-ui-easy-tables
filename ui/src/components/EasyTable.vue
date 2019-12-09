@@ -1,7 +1,7 @@
 <template>
   <div class="easy-table">
     <div class="easy-table__nav-row" v-if="title || cActionButtons.length">
-      <div class="my-title">{{ title }}</div>
+      <div class="easy-table__title">{{ title }}</div>
       <EfBtn
         v-for="btn in cActionButtons"
         :key="btn.btnLabel"
@@ -96,6 +96,8 @@
   padding: $md
   .easy-field__sub-label
     display: none
+.easy-table__title
+  font-size: 20px
 
 </style>
 
