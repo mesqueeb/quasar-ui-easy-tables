@@ -2,12 +2,19 @@
   <div class="easy-table">
     <div class="easy-table__nav-row" v-if="title || cActionButtons.length">
       <div class="easy-table__title">{{ title }}</div>
-      <EfBtn
-        v-for="btn in cActionButtons"
-        :key="btn.btnLabel"
-        v-bind="btn"
-        v-on="btn.events"
-      />
+      <EfBtn v-for="btn in cActionButtons" :key="btn.btnLabel" v-bind="btn" v-on="btn.events" />
+    </div>
+    <div class="easy-table__search-row" v-if="showSearchBar">
+      <EfInput
+        borderless
+        dense
+        debounce="300"
+        v-model="innerFilter"
+        placeholder="Search"
+        icon="search"
+      >
+        <q-icon name="search" />
+      </EfInput>
     </div>
     <q-table
       class="easy-table__table"
@@ -30,8 +37,7 @@
           :row-style="rowStyle"
           :row-classes="rowClasses"
           mode="raw"
-
-          @row-input="({rowId, fieldId, value}) => onInputCell(rowId, fieldId, value)"
+          @row-input="({ rowId, fieldId, value }) => onInputCell(rowId, fieldId, value)"
           v-slot="EasyFormSimulatedContext"
         >
           <q-td auto-width v-if="quasarProps.selection">
@@ -64,7 +70,9 @@
             :value="gridItemProps.row"
             :id="gridItemProps.row.id"
             v-bind="gridEasyFormProps"
-            @field-input="({id: fieldId, value}) => onInputCell(gridItemProps.row.id, fieldId, value)"
+            @field-input="
+              ({ id: fieldId, value }) => onInputCell(gridItemProps.row.id, fieldId, value)
+            "
           />
         </q-card>
       </template>
@@ -91,6 +99,8 @@
   grid-auto-flow: column
   margin-bottom: $md
   grid-template-columns: 1fr
+.easy-table__search-row
+  margin-bottom: $md
 .easy-table__grid-item
   margin: $sm
   padding: $md
@@ -98,7 +108,6 @@
     display: none
 .easy-table__title
   font-size: 20px
-
 </style>
 
 <script>
@@ -106,8 +115,8 @@ import pathToProp from 'path-to-prop'
 import merge from 'merge-anything'
 import { flattenArray } from 'flatten-anything'
 import { isPlainObject, isFunction } from 'is-what'
-import { QTable, QTd, QCheckbox, QCard } from 'quasar'
-import { EfBtn, EasyForm } from 'quasar-ui-easy-forms'
+import { QTable, QTd, QCheckbox, QCard, QIcon } from 'quasar'
+import { EfBtn, EfInput, EasyForm } from 'quasar-ui-easy-forms'
 import EasyRow from './EasyRow.vue'
 import EasyCell from './EasyCell.vue'
 import schemaToQuasarColumns from '../helpers/schemaToQuasarColumns.js'
@@ -116,7 +125,7 @@ import defaultLang from '../meta/lang.js'
 export default {
   name: 'EasyTable',
   inheritAttrs: false,
-  components: { QTable, QTd, QCheckbox, QCard, EfBtn, EasyForm, EasyRow, EasyCell },
+  components: { QTable, QTd, QCheckbox, QCard, QIcon, EfBtn, EfInput, EasyForm, EasyRow, EasyCell },
   desc: `EasyForms is a peer dependency!`,
   props: {
     // EasyTable props:
@@ -132,7 +141,8 @@ export default {
     },
     rows: {
       category: 'general',
-      desc: 'Rows of data to display. Use `rows` instead of the QTables `data`. Renamed for clarity.',
+      desc:
+        'Rows of data to display. Use `rows` instead of the QTables `data`. Renamed for clarity.',
       type: Array,
     },
     actionButtons: {
@@ -174,6 +184,11 @@ Please note:
       category: 'style',
       desc: 'Check the description at EasyRow.vue',
     },
+    showSearchBar: {
+      category: 'content',
+      type: Boolean,
+      default: false,
+    },
     // Inherited props used here:
     grid: {
       inheritedProp: true,
@@ -183,7 +198,7 @@ Please note:
     selected: {
       inheritedProp: true,
       type: Array,
-      default: () => []
+      default: () => [],
     },
     cardClass: { inheritedProp: true },
     cardStyle: { inheritedProp: true },
@@ -196,7 +211,8 @@ Please note:
     },
     columns: {
       inheritedProp: 'modified',
-      desc: 'Do not use this! Use `schemaColumns` instead. This is the prop QTable uses to define its columns. EasyTable uses `schemaColumns` instead.',
+      desc:
+        'Do not use this! Use `schemaColumns` instead. This is the prop QTable uses to define its columns. EasyTable uses `schemaColumns` instead.',
     },
     title: {
       inheritedProp: 'modified',
@@ -214,18 +230,24 @@ Please note:
     const innerSelected = selected
     const innerLang = merge(defaultLang, lang)
     const innerGrid = grid
+    const innerFilter = ''
     return {
+      innerFilter,
       innerSelected,
       innerLang,
       innerGrid,
       tablePagination: {
         rowsPerPage: 10,
-      }
+      },
     }
   },
   watch: {
-    grid (newValue) { this.innerGrid = newValue },
-    selected (newValue) { this.innerSelected = newValue },
+    grid (newValue) {
+      this.innerGrid = newValue
+    },
+    selected (newValue) {
+      this.innerSelected = newValue
+    },
   },
   computed: {
     quasarProps () {
@@ -236,6 +258,7 @@ Please note:
         rowKey: 'id',
         grid: this.innerGrid,
         // Quasar props with modified defaults:
+        filter: this.$attrs.filter || this.innerFilter,
         // Quasar props just to pass:
       })
     },
@@ -249,8 +272,13 @@ Please note:
       return merge(defaults, gridEasyFormOptions)
     },
     cSelected: {
-      get () { return this.innerSelected },
-      set (val) { this.innerSelected = val; this.$emit('update:selected', val) },
+      get () {
+        return this.innerSelected
+      },
+      set (val) {
+        this.innerSelected = val
+        this.$emit('update:selected', val)
+      },
     },
     cColumns () {
       return schemaToQuasarColumns(this.schemaColumns)
@@ -268,30 +296,36 @@ Please note:
         schemaGrid,
       } = this
       const easyTableContext = this
-      return actionButtons.map(btn => {
-        if (btn === 'grid' && schemaGrid) {
-          // return // 以下の機能は未完成
-          return (innerGrid)
-            ? {icon: 'view_list', flat: true, events: {click: disableGrid}}
-            : {icon: 'view_module', flat: true, events: {click: enableGrid}}
-        }
-        if (cSelected.length) {
-          if (btn === 'selection:duplicate') {
-            return {btnLabel: innerLang['duplicate'], push: true, events: {click: tapDuplicate}}
+      return actionButtons
+        .map(btn => {
+          if (btn === 'grid' && schemaGrid) {
+            // return // 以下の機能は未完成
+            return innerGrid
+              ? { icon: 'view_list', flat: true, events: { click: disableGrid } }
+              : { icon: 'view_module', flat: true, events: { click: enableGrid } }
           }
-        }
-        if (!cSelected.length) {
-          if (btn === 'add') {
-            return {btnLabel: innerLang['add'], push: true, events: {click: tapAdd}}
+          if (cSelected.length) {
+            if (btn === 'selection:duplicate') {
+              return {
+                btnLabel: innerLang['duplicate'],
+                push: true,
+                events: { click: tapDuplicate },
+              }
+            }
           }
-        }
-        if (isPlainObject(btn)) {
-          if (!isPlainObject(btn.events)) return btn
-          const { click } = btn.events
-          if (isFunction(click)) btn.events.click = val => click(val, easyTableContext)
-          return btn
-        }
-      }).filter(btn => isPlainObject(btn))
+          if (!cSelected.length) {
+            if (btn === 'add') {
+              return { btnLabel: innerLang['add'], push: true, events: { click: tapAdd } }
+            }
+          }
+          if (isPlainObject(btn)) {
+            if (!isPlainObject(btn.events)) return btn
+            const { click } = btn.events
+            if (isFunction(click)) btn.events.click = val => click(val, easyTableContext)
+            return btn
+          }
+        })
+        .filter(btn => isPlainObject(btn))
     },
   },
   methods: {
@@ -304,10 +338,18 @@ Please note:
     disableGrid () {
       this.innerGrid = false
     },
-    tapAdd () { this.$emit('add') },
-    tapDuplicate () { this.$emit('duplicate', this.cSelected) },
-    onRowClick (event, rowData) { this.$emit('row-click', event, rowData) },
-    onInputCell (rowId, colId, value) { this.$emit('input-cell', {rowId, colId, value}) },
-  }
+    tapAdd () {
+      this.$emit('add')
+    },
+    tapDuplicate () {
+      this.$emit('duplicate', this.cSelected)
+    },
+    onRowClick (event, rowData) {
+      this.$emit('row-click', event, rowData)
+    },
+    onInputCell (rowId, colId, value) {
+      this.$emit('input-cell', { rowId, colId, value })
+    },
+  },
 }
 </script>
