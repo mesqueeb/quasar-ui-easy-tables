@@ -1,19 +1,15 @@
 <template>
   <q-page class="easy-table-demo" padding>
-    <EasyForm
-      class="page-form"
-      v-model="pageValue"
-      v-bind="pageForm"
-    />
+    <EasyForm class="page-form" v-model="pageValue" v-bind="pageForm" />
     <InfoCard
       class="q-mt-lg"
       tag-name="EasyTable"
       :title="infoCardTitle"
       :prop-data.sync="exampleTables[pageValue.chosenExample]"
+      :static-schema-tab="exampleTablesRaw[pageValue.chosenExample]"
       :props-schema="propsSchema"
       :style-classes="styleClasses"
       :style-classes-data="styleClassesData"
-      :props-separate-tab="['schemaColumns', 'schemaGrid', 'rows']"
     >
       <EasyTable
         class="q-pa-md _interactive-preview"
@@ -35,28 +31,26 @@
   .ef-btn-toggle
     border: solid 2px $primary
     border-radius: 6px
-
+    > *
+      border-radius: 3px
 </style>
 
 <script>
 import merge from 'merge-anything'
-import * as demoSchemas from '../schemas/index'
+import * as demoSchemas from '../schemas/examples/index'
+import * as pageForms from '../schemas/pages/index'
 import { capitalCase } from 'case-anything'
 import { propToPropSchema } from '../helpers/schemaBuilders'
 import { dependencyMap, EasyTable } from 'ui'
 
 const inheritedProps = dependencyMap.getPassedProps('EasyTable')
-const rawProps = merge(
-  inheritedProps,
-  EasyTable.props,
-)
+const rawProps = merge(inheritedProps, EasyTable.props)
 
 export function getInfoCardPropsSchema (props) {
-  return Object.entries(props)
-    .reduce((carry, [propKey, propInfo]) => {
-      carry[propKey] = propToPropSchema(propKey, propInfo)
-      return carry
-    }, {})
+  return Object.entries(props).reduce((carry, [propKey, propInfo]) => {
+    carry[propKey] = propToPropSchema(propKey, propInfo)
+    return carry
+  }, {})
 }
 
 export default {
@@ -65,7 +59,10 @@ export default {
     schemaId: String,
   },
   data () {
-    const { pageForm, exampleTables } = demoSchemas[this.schemaId]
+    const { schemaId } = this
+    const pageForm = pageForms[schemaId]
+    const exampleTables = demoSchemas[schemaId].code
+    const exampleTablesRaw = demoSchemas[schemaId].string
     // const settingsSchema = getInfoCardSchema('EasyTable')
     const styleClasses = [
       '.easy-table',
@@ -79,13 +76,14 @@ export default {
       '.easy-field__label',
     ]
     const styleClassesData = {
-      '.easy-field__label': {'font-weight': 100}
+      '.easy-field__label': { 'font-weight': 100 },
     }
     const propsSchema = getInfoCardPropsSchema(rawProps)
     return {
       pageValue: { chosenExample: 0 },
       pageForm,
-      exampleTables: exampleTables.map(f => merge({value: {}}, f)),
+      exampleTables: exampleTables.map(f => merge({ value: {} }, f)),
+      exampleTablesRaw,
       styleClasses,
       styleClassesData,
       propsSchema,

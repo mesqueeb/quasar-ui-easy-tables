@@ -24,7 +24,7 @@
   "bugs": "https://github.com/mesqueeb/quasar-ui-easy-tables/issues",
   "homepage": "https://quasar-easy-tables.web.app",
   "peerDependencies": {
-    "quasar-ui-easy-forms": "^0.10.12"
+    "quasar-ui-easy-forms": "^0.10.16"
   },
   "devDependencies": {
     "@rollup/plugin-buble": "^0.20.0",
@@ -32,26 +32,24 @@
     "chalk": "^2.4.2",
     "fs-extra": "^8.1.0",
     "open": "^6.4.0",
-    "quasar": "^1.0.0",
-    "quasar-ui-easy-forms": "^0.10.12",
+    "quasar": "^1.5.9",
+    "quasar-ui-easy-forms": "^0.10.16",
     "rimraf": "^3.0.0",
-    "rollup": "^1.21.3",
+    "rollup": "^1.27.13",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-vue": "^5.1.4",
     "uglify-es": "^3.3.9",
-    "vue-template-compiler": "^2.6.10",
+    "vue-template-compiler": "^2.6.11",
     "zlib": "^1.0.5"
   },
-  "browserslist": [
-    "last 1 version, not dead, ie >= 11"
-  ],
+  "browserslist": ["last 1 version, not dead, ie >= 11"],
   "dependencies": {
     "commafy-anything": "^1.1.1",
     "copy-anything": "^1.5.1",
     "flatten-anything": "^1.4.1",
     "is-what": "^3.4.0",
-    "merge-anything": "^2.4.3",
+    "merge-anything": "^2.4.4",
     "nestify-anything": "0.0.0",
     "path-to-prop": "0.0.1"
   }
