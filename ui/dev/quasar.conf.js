@@ -7,13 +7,9 @@ module.exports = function (ctx) {
   return {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
-    boot: [
-      'vueComponents.js',
-      'register.js',
-    ],
+    boot: ['vueComponents.js', 'register.js'],
 
-    css: [
-    ],
+    css: [],
 
     extras: [
       // 'ionicons-v4',
@@ -24,7 +20,7 @@ module.exports = function (ctx) {
       // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
 
       'roboto-font', // optional, you are not bound to it
-      'material-icons' // optional, you are not bound to it
+      'material-icons', // optional, you are not bound to it
     ],
 
     framework: {
@@ -40,11 +36,11 @@ module.exports = function (ctx) {
       //            (not treeshaking Quasar; biggest bundle size; convenient)
       all: 'auto',
 
-      components: [],
+      components: ['QInput', 'QImg', 'QToggle', 'QSelect', 'QBtnToggle'],
       directives: [],
 
       // Quasar plugins
-      plugins: ['Dialog']
+      plugins: ['Dialog'],
     },
 
     supportIE: false,
@@ -57,14 +53,14 @@ module.exports = function (ctx) {
 
       chainWebpack (chain) {
         chain.resolve.alias.merge({
-          'ui': path.resolve(__dirname, '../src/index.js')
+          ui: path.resolve(__dirname, '../src/index.js'),
         })
-      }
+      },
     },
 
     devServer: {
       // port: 8080,
-      open: true // opens browser window automatically
-    }
+      open: true, // opens browser window automatically
+    },
   }
 }

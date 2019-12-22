@@ -14,9 +14,10 @@ export default {
   actionButtons: [],
   schema: [
     {
-      fieldType: 'markdown',
+      component: 'QMarkdown',
       src: description,
       noContainer: true,
+      noLineNumbers: true,
     },
   ],
 }

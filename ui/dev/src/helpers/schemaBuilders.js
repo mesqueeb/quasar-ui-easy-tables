@@ -8,23 +8,33 @@ export function propToPropSchema (propKey, propInfo) {
   // make the raw prop info from the components into an EasyForm:
   // whatever the prop is, default to an 'input' EasyField
   const events = {}
-  let fieldType = 'input'
+  let component = 'QInput'
   let subLabel = desc
-  let options, outlined, standout, disable, parseInput, format, autogrow, debounce, span, emitValue
+  let options,
+    outlined,
+    standout,
+    disable,
+    parseInput,
+    parseValue,
+    autogrow,
+    debounce,
+    span,
+    emitValue
   let fieldClasses = []
+  let _default = df === true || undefined
   // If it has a default, write it in the description
   if (!isUndefined(df)) subLabel += `\n\nDefault: \`${isFunction(df) ? JSON.stringify(df()) : df}\``
   // if the prop is a Boolean, show this as a 'toggle' EasyField
-  if (
-    type === Boolean ||
-    (isArray(type) && [Boolean, Function].every(t => type.includes(t)) && type.length === 2)
-  ) { fieldType = 'toggle' }
+  if (type === Boolean || (isArray(type) && type.includes(Boolean))) {
+    component = 'QToggle'
+    _default = df === true
+  }
   // if the prop has a fixed set of possible values, show this as an 'option' EasyField
   const propHasValues = isArray(values) && values.length
   if (propHasValues) {
-    fieldType = 'select'
+    component = 'QSelect'
     emitValue = true
-    options = values.map(v => ({label: v, value: v}))
+    options = values.map(v => ({ label: v, value: v }))
   }
   // Create a special input for defining arrays and/or objects
   if (
@@ -38,7 +48,7 @@ export function propToPropSchema (propKey, propInfo) {
     standout = true
     debounce = 500
     parseInput = stringToJs
-    format = JSON.stringify
+    parseValue = JSON.stringify
     autogrow = true
     if (isArray(examples)) subLabel += `\nExamples: \`${examples.join('` | `')}\``
   }
@@ -46,15 +56,16 @@ export function propToPropSchema (propKey, propInfo) {
   if (type === Function) disable = true
   // If it's the prop called 'schema', span the entire form, add extra info and don't return any input field
   if (propKey === 'schema') {
-    fieldType = 'none'
+    component = ''
     span = true
-    subLabel += '\n\n> 👀 Check「Source tab」→「Schema」to see the following code in color and with indentation.'
+    subLabel +=
+      '\n\n> 👀 Check「Source tab」→「Schema」to see the following code in color and with indentation.'
   }
-  // Create the EfField schema for the prop
+  // Create the EasyField schema for the prop
   return {
     id: propKey,
-    fieldType,
-    valueType: type === Number ? 'number' : undefined,
+    component,
+    type: type === Number ? 'number' : undefined,
     // schema,
     label: propKey,
     subLabel,
@@ -65,7 +76,7 @@ export function propToPropSchema (propKey, propInfo) {
     standout,
     disable,
     parseInput,
-    format,
+    parseValue,
     autogrow,
     category,
     fieldClasses,
@@ -74,7 +85,7 @@ export function propToPropSchema (propKey, propInfo) {
     span,
     emitValue,
     // if the prop is `true` by default, set to true
-    default: df === true || undefined,
+    default: _default,
     // defaults
     hasMarkdown: true,
   }

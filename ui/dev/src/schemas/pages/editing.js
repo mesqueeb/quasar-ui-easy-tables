@@ -5,14 +5,16 @@ export default {
   actionButtons: [],
   schema: Object.values({
     _1: {
-      fieldType: 'markdown',
+      component: 'QMarkdown',
       src: description,
       noContainer: true,
+      noLineNumbers: true,
     },
     get _2 () {
       return {
         id: 'chosenExample',
-        fieldType: 'btn-toggle',
+        component: 'QBtnToggle',
+        spread: true,
         noCaps: true,
         options: [this._3, this._4].map((field, index) => {
           return { label: field.label, value: index }
@@ -20,14 +22,16 @@ export default {
       }
     },
     _3: {
-      showCondition: (value, { formDataNested }) => formDataNested.chosenExample === 0,
-      fieldType: 'title',
+      showCondition: (value, { formData }) => formData.chosenExample === 0,
       label: 'Editable form on row click',
+      span: true,
+      evaluatedProps: ['showCondition'],
     },
     _4: {
-      showCondition: (value, { formDataNested }) => formDataNested.chosenExample === 1,
-      fieldType: 'title',
+      showCondition: (value, { formData }) => formData.chosenExample === 1,
       label: 'Editable form on button click',
+      span: true,
+      evaluatedProps: ['showCondition'],
     },
   }),
 }

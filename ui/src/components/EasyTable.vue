@@ -5,7 +5,7 @@
       <EfBtn v-for="btn in cActionButtons" :key="btn.btnLabel" v-bind="btn" v-on="btn.events" />
     </div>
     <div class="easy-table__search-row" v-if="showSearchBar">
-      <EfInput
+      <QInput
         borderless
         dense
         debounce="300"
@@ -14,7 +14,7 @@
         icon="search"
       >
         <q-icon name="search" />
-      </EfInput>
+      </QInput>
     </div>
     <q-table
       class="easy-table__table"
@@ -52,8 +52,8 @@
           >
             <!-- requires row, blueprint, value -->
             <EasyCell
-              v-bind="merge(blueprint, EasyFormSimulatedContext)"
-              :value="pathToProp(EasyFormSimulatedContext.formDataNested, blueprint.id)"
+              v-bind="merge(EasyFormSimulatedContext, blueprint)"
+              :value="pathToProp(EasyFormSimulatedContext.formData, blueprint.id)"
               @input="val => onInputCell(rowProps.row.id, blueprint.id, val)"
             />
           </q-td>
@@ -115,8 +115,8 @@ import pathToProp from 'path-to-prop'
 import merge from 'merge-anything'
 import { flattenArray } from 'flatten-anything'
 import { isPlainObject, isFunction } from 'is-what'
-import { QTable, QTd, QCheckbox, QCard, QIcon } from 'quasar'
-import { EfBtn, EfInput, EasyForm } from 'quasar-ui-easy-forms'
+import { QTable, QTd, QCheckbox, QCard, QIcon, QInput } from 'quasar'
+import { EfBtn, EasyForm } from 'quasar-ui-easy-forms'
 import EasyRow from './EasyRow.vue'
 import EasyCell from './EasyCell.vue'
 import schemaToQuasarColumns from '../helpers/schemaToQuasarColumns.js'
@@ -125,7 +125,18 @@ import defaultLang from '../meta/lang.js'
 export default {
   name: 'EasyTable',
   inheritAttrs: false,
-  components: { QTable, QTd, QCheckbox, QCard, QIcon, EfBtn, EfInput, EasyForm, EasyRow, EasyCell },
+  components: {
+    QTable,
+    QTd,
+    QCheckbox,
+    QCard,
+    QInput,
+    QIcon,
+    EfBtn,
+    EasyForm,
+    EasyRow,
+    EasyCell,
+  },
   desc: `EasyForms is a peer dependency!`,
   props: {
     // EasyTable props:

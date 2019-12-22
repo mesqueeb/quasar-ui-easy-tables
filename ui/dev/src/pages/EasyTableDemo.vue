@@ -82,7 +82,7 @@ export default {
     return {
       pageValue: { chosenExample: 0 },
       pageForm,
-      exampleTables: exampleTables.map(f => merge({ value: {} }, f)),
+      exampleTables,
       exampleTablesRaw,
       styleClasses,
       styleClassesData,

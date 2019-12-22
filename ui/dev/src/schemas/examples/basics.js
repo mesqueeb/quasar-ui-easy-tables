@@ -8,7 +8,7 @@ const rows = [
     grade: 90000,
     passing: true,
     created: new Date(),
-    classes: { '1': 'One' },
+    classes: [{ label: 'One', value: '1' }],
   },
   {
     title: 'Mathematica',
@@ -19,7 +19,7 @@ const rows = [
     grade: 90000,
     passing: false,
     created: new Date(),
-    classes: { '1': 'One' },
+    classes: [{ label: 'One', value: '1' }],
   },
   {
     title: 'Mathematica',
@@ -30,7 +30,7 @@ const rows = [
     grade: 90000,
     passing: true,
     created: new Date(),
-    classes: { '1': 'One' },
+    classes: [{ label: 'One', value: '1' }],
   },
   {
     title: 'Mathematica',
@@ -41,7 +41,7 @@ const rows = [
     grade: 90000,
     passing: true,
     created: new Date(),
-    classes: { '1': 'One' },
+    classes: [{ label: 'One', value: '1' }],
   },
   {
     title: 'Mathematica',
@@ -52,7 +52,7 @@ const rows = [
     grade: 90000,
     passing: true,
     created: new Date(),
-    classes: { '1': 'One' },
+    classes: [{ label: 'One', value: '1' }],
   },
 ]
 
@@ -63,50 +63,58 @@ export default {
     {
       id: 'title',
       label: 'Lesson Title',
-      fieldType: 'input',
-      valueType: 'string',
+      component: 'QInput',
     },
     {
       id: 'topic',
       label: 'Topic',
-      fieldType: 'input',
-      valueType: 'string',
+      component: 'QInput',
     },
     {
       id: 'subject',
       label: 'Subject',
-      fieldType: 'input',
-      valueType: 'string',
+      component: 'QInput',
     },
     {
       id: 'img',
       label: 'Image',
-      fieldType: 'img',
+      component: 'QImg',
+      mode: 'view',
+      evaluatedProps: ['src'],
+      internalErrors: true,
+      // component props:
+      src: val => val,
     },
     {
       id: 'grade',
       label: 'Grade',
-      fieldType: 'input',
-      valueType: 'number',
+      component: 'QInput',
+      // component props:
+      type: 'number',
     },
     {
       id: 'passing',
       label: 'Passing',
-      fieldType: 'toggle',
-      valueType: 'boolean',
+      component: 'QToggle',
+      default: false,
     },
     {
       id: 'created',
       label: 'Created at',
-      fieldType: 'input-date',
+      component: 'QInput',
+      parseInput: val => new Date(val),
+      dateFormat: 'YYYY/MM/DD',
       valueType: 'date',
+      // component props:
+      mask: '####/##/##',
+      placeholder: 'YYYY/MM/DD',
     },
     {
       id: 'classes',
       label: 'Classes',
-      fieldType: 'select',
+      component: 'QSelect',
+      // component props:
       multiple: true,
-      valueType: 'object',
       options: [
         { label: 'One', value: '1' },
         { label: 'Two', value: '2' },

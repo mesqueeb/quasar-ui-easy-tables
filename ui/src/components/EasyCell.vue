@@ -1,23 +1,13 @@
 <template>
-  <div
-    :class="['easy-cell', ...cCellClassesArray]"
-    :style="cCellStyle"
-  >
-    <EasyField
-      v-if="fieldType"
-      v-model="cValue"
-      v-bind="cPropsToPass"
-    />
-    <div
-      v-else
-    >{{ cValue }}</div>
+  <div :class="['easy-cell', ...cCellClassesArray]" :style="cCellStyle">
+    <EasyField v-if="component" v-model="cValue" v-bind="easyFieldProps" />
+    <div v-else>{{ cValue }}</div>
   </div>
 </template>
 
 <style lang="sass">
 // $
 @import '../index.sass'
-
 </style>
 
 <script>
@@ -27,15 +17,14 @@ import merge from 'merge-anything'
 import { EasyField } from 'quasar-ui-easy-forms'
 import { dateStamp } from '../helpers/dateHelpers'
 
-function resolveEasyFieldProp (propValue, componentValue, component) {
-  return (isFunction(propValue))
-    ? propValue(componentValue, component)
-    : propValue
+function resolveEasyFieldProp (propValue, componentValue, componentContext) {
+  return isFunction(propValue) ? propValue(componentValue, componentContext) : propValue
 }
 
 export default {
   name: 'EasyCell',
   components: { EasyField },
+  inheritAttrs: false,
   props: {
     value: {
       type: undefined,
@@ -54,42 +43,29 @@ export default {
       examples: [`['dark-theme']`],
     },
     // EasyForm props that are used here:
-    formDataNested: { type: Object, category: 'easyFormProp', default: () => ({}) },
+    formData: { type: Object, category: 'easyFormProp', default: () => ({}) },
     formDataFlat: { type: Object, category: 'easyFormProp', default: () => ({}) },
-    formId: { type: String, category: 'easyFormProp', },
-    formMode: { type: String, category: 'easyFormProp', },
-    fieldInput: { type: Function, category: 'easyFormProp', },
+    formId: { type: String, category: 'easyFormProp' },
+    mode: { type: String, category: 'easyFormProp' },
+    fieldInput: { type: Function, category: 'easyFormProp' },
     // EasyField props that are used here:
-    fieldType: { type: String },
+    component: { type: String },
     events: { type: Object, default: () => ({}), desc: `only 'click' is used for button fields` },
   },
   computed: {
-    cPropsToPass () {
-      const defaults = {
-        size: 'md',
-        rawValue: this.formMode === 'raw',
-        readonly: this.formMode === 'view',
-      }
+    easyFieldProps () {
       return merge(
-        defaults,
-        this.$attrs, {
-          // force these options:
-          label: null,
-          subLabel: null,
-          // EasyForm & EasyField props from props of EasyCell ↑:
-          events: this.events,
-          fieldType: this.fieldType,
-          formDataNested: this.formDataNested,
-          formDataFlat: this.formDataFlat,
-          formId: this.formId,
-          formMode: this.formMode,
-          fieldInput: this.fieldInput,
-        }
+        // overwritable defaults:
+        { mode: 'raw' },
+        this.$attrs,
+        this.$props,
+        // force these options:
+        { label: null, subLabel: null }
       )
     },
     easyFieldSimulatedContext () {
       // simulate the EasyField component to be able to resolve EvaluatedProps
-      return merge(this.cPropsToPass, {
+      return merge(this.easyFieldProps, {
         $store: this.$store,
         $router: this.$router,
         $q: this.$q,
@@ -107,12 +83,14 @@ export default {
       return classes
     },
     cValue: {
-      get () { return this.value },
+      get () {
+        return this.value
+      },
       set (val) {
         this.$emit('input', val)
       },
     },
   },
-  methods: {isArray},
+  methods: { isArray },
 }
 </script>

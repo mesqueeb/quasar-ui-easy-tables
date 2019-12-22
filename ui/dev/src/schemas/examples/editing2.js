@@ -5,38 +5,48 @@ const schemaColumns = [
   {
     id: 'name',
     label: 'Name',
-    fieldType: 'input',
-    valueType: 'string',
+    component: 'QInput',
   },
   {
     id: 'img',
     label: 'Profile picture',
-    fieldType: 'img',
+    component: 'QImg',
+    mode: 'view',
+    evaluatedProps: ['src'],
+    internalErrors: true,
+    // component props:
+    src: val => val,
   },
   {
     id: 'level',
     label: 'Level',
-    fieldType: 'input',
-    valueType: 'number',
+    component: 'QInput',
+    // component props:
+    type: 'number',
   },
   {
     id: 'darkSide',
     label: 'Dark side',
-    fieldType: 'toggle',
-    valueType: 'boolean',
+    component: 'QToggle',
+    default: false,
   },
   {
     id: 'birthdate',
     label: 'Created at',
-    fieldType: 'input-date',
+    component: 'QInput',
+    parseInput: val => new Date(val),
     valueType: 'date',
+    // component props:
+    mask: '####/##/##',
+    placeholder: 'YYYY/MM/DD',
+    dateFormat: 'YYYY/MM/DD',
   },
   {
     id: 'trialsCompleted',
     label: 'Trials completed',
-    fieldType: 'select',
+    component: 'QSelect',
+    // component props:
     multiple: true,
-    valueType: 'object',
     options: [
       { label: 'One', value: '1' },
       { label: 'Two', value: '2' },
@@ -52,7 +62,7 @@ const rows = [
     level: 90000,
     darkSide: true,
     birthdate: new Date(),
-    trialsCompleted: { '1': 'One' },
+    trialsCompleted: [{ label: 'One', value: '1' }],
   },
 ]
 
@@ -61,16 +71,21 @@ export default {
   schemaColumns: [
     {
       id: 'edit-btn',
-      fieldType: 'btn',
+      component: 'EfBtn',
       btnLabel: 'Edit',
+      mode: 'edit',
+      unelevated: true,
+      size: 'sm',
+      dense: true,
+      hideBottomSpace: true,
       events: {
-        click: (event, { formDataNested }) => {
+        click: (event, { formData }) => {
           Dialog.create({
             component: DEasyForm,
             parent: this,
             // props forwarded to component
             propsToPass: {
-              value: formDataNested,
+              value: formData,
               schema: schemaColumns,
               class: 'q-pa-lg',
               mode: 'edit',

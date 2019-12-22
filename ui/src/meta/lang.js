@@ -1,4 +1,3 @@
-
 const defaultLang = {
   add: 'Add new',
   duplicate: 'Duplicate',

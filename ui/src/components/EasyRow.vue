@@ -13,7 +13,6 @@
 @import '../index.sass'
 
 // .easy-row
-
 </style>
 
 <script>
@@ -25,14 +24,13 @@ import { QTr } from 'quasar'
 import flattenPerSchema from '../helpers/flattenPerSchema'
 
 function resolveEasyFormProp (propValue, componentValue, component) {
-  return (isFunction(propValue))
-    ? propValue(componentValue, component)
-    : propValue
+  return isFunction(propValue) ? propValue(componentValue, component) : propValue
 }
 
 export default {
   name: 'EasyRow',
   components: { QTr },
+  inheritAttrs: false,
   props: {
     qTableRowProps: {
       type: Object,
@@ -40,11 +38,11 @@ export default {
     },
     value: {
       type: Object,
-      desc: 'The EasyForm data'
+      desc: 'The EasyForm data',
     },
     schema: {
       type: [Array, Object],
-      desc: 'The EasyForm schema'
+      desc: 'The EasyForm schema',
     },
     rowStyle: {
       category: 'style',
@@ -75,29 +73,30 @@ export default {
       return classes
     },
     easyFormSimulatedContext () {
-      const { value: formDataNested, schema, id: formId, mode } = this
+      const { value: formData, schema, id: formId, mode } = this
       const schemaArray = isArray(schema) ? schema : Object.values(schema)
-      const dataFlat = flattenPerSchema(formDataNested, schema)
-      const dataFlatDefaults = schemaArray.reduce((carry, {id, default: df}) => {
+      const dataFlat = flattenPerSchema(formData, schema)
+      const dataFlatDefaults = schemaArray.reduce((carry, { id, default: df }) => {
         // set default for formDataFlat
-        carry[id] = isFunction(df) ? df(formDataNested) : df
+        carry[id] = isFunction(df) ? df(formData) : df
         return carry
       }, {})
       const formDataFlat = merge(dataFlatDefaults, copy(dataFlat))
-      const fieldInput = ({id: fieldId, value}) => this.$emit('row-input', {
-        rowId: formId,
-        fieldId,
-        value,
-      })
+      const fieldInput = ({ id: fieldId, value }) =>
+        this.$emit('row-input', {
+          rowId: formId,
+          fieldId,
+          value,
+        })
       return {
-        // make sure formDataNested is rebuild from "flat" to have the default value
-        formDataNested: nestifyObject(formDataFlat),
+        // make sure formData is rebuild from "flat" to have the default value
+        formData: nestifyObject(formDataFlat),
         formDataFlat,
         formId,
-        formMode: mode,
+        mode,
         fieldInput,
       }
-    }
+    },
   },
   methods: {},
 }

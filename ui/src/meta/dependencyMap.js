@@ -1,7 +1,5 @@
 import merge from 'merge-anything'
-import {
-  QTable,
-} from './quasarPropsJson'
+import { QTable } from './quasarPropsJson'
 
 export const dependencyMap = {
   EasyTable: {
@@ -14,4 +12,4 @@ export function getPassedProps (tagName) {
   return merge(...Object.values(inheritedComponents))
 }
 
-export default {...dependencyMap, getPassedProps}
+export default { ...dependencyMap, getPassedProps }
