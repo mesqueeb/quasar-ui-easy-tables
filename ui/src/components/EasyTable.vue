@@ -1,27 +1,24 @@
 <template>
   <div class="easy-table">
+    <slot name="above-nav-row" />
     <div class="easy-table__nav-row" v-if="title || cActionButtons.length">
       <div class="easy-table__title">{{ title }}</div>
       <EfBtn v-for="btn in cActionButtons" :key="btn.btnLabel" v-bind="btn" v-on="btn.events" />
     </div>
-    <div class="easy-table__search-row" v-if="showSearchBar">
-      <QInput
-        borderless
-        dense
-        debounce="300"
-        v-model="innerFilter"
-        placeholder="Search"
-        icon="search"
-      >
-        <q-icon name="search" />
-      </QInput>
-    </div>
+    <slot name="above-table" />
     <q-table
       class="easy-table__table"
       v-bind="quasarProps"
       :selected.sync="cSelected"
       :pagination.sync="tablePagination"
     >
+      <!-- Pass on all named slots -->
+      <slot v-for="slot in Object.keys($slots)" :name="slot" v-slot:[slot] />
+      <!-- Pass on all scoped slots -->
+      <template v-for="slot in Object.keys($scopedSlots)" v-slot:[slot]="scope">
+        <slot :name="slot" v-bind="scope"
+      /></template>
+
       <template v-slot:body="rowProps">
         <!--
           EasyRow.vue's only purpose is:
@@ -119,7 +116,7 @@ import { QTable, QTd, QCheckbox, QCard, QIcon, QInput } from 'quasar'
 import { EfBtn, EasyForm } from 'quasar-ui-easy-forms'
 import EasyRow from './EasyRow.vue'
 import EasyCell from './EasyCell.vue'
-import schemaToQuasarColumns from '../helpers/schemaToQuasarColumns.js'
+import schemaToQTableColumns from '../helpers/schemaToQTableColumns.js'
 import defaultLang from '../meta/lang.js'
 
 export default {
@@ -195,11 +192,6 @@ Please note:
       category: 'style',
       desc: 'Check the description at EasyRow.vue',
     },
-    showSearchBar: {
-      category: 'content',
-      type: Boolean,
-      default: false,
-    },
     // Inherited props used here:
     grid: {
       inheritedProp: true,
@@ -241,9 +233,9 @@ Please note:
     const innerSelected = selected
     const innerLang = merge(defaultLang, lang)
     const innerGrid = grid
-    const innerFilter = ''
+    // const innerFilter = filter
     return {
-      innerFilter,
+      // innerFilter,
       innerSelected,
       innerLang,
       innerGrid,
@@ -269,7 +261,7 @@ Please note:
         rowKey: 'id',
         grid: this.innerGrid,
         // Quasar props with modified defaults:
-        filter: this.$attrs.filter || this.innerFilter,
+        // filter: this.$attrs.filter || this.innerFilter,
         // Quasar props just to pass:
       })
     },
@@ -292,7 +284,7 @@ Please note:
       },
     },
     cColumns () {
-      return schemaToQuasarColumns(this.schemaColumns)
+      return schemaToQTableColumns(this.schemaColumns)
     },
     cActionButtons () {
       const {

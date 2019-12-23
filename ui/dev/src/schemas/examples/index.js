@@ -6,3 +6,7 @@ export const editing = {
   code: [require('./editing').default, require('./editing2').default],
   string: [require('!!raw-loader!./editing').default, require('!!raw-loader!./editing2').default],
 }
+export const slots = {
+  code: [require('./slots').default],
+  string: [require('!!raw-loader!./slots').default],
+}

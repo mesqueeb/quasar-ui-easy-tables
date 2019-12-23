@@ -2,18 +2,18 @@ import { version } from '../package.json'
 
 import EasyTable from './components/EasyTable.vue'
 
-import schemaToQuasarColumns from './helpers/schemaToQuasarColumns.js'
+import schemaToQTableColumns from './helpers/schemaToQTableColumns.js'
 
 import dependencyMap from './meta/dependencyMap'
 
-export { version, EasyTable, schemaToQuasarColumns, dependencyMap }
+export { version, EasyTable, schemaToQTableColumns, dependencyMap }
 
 export default {
   version,
 
   EasyTable,
 
-  schemaToQuasarColumns,
+  schemaToQTableColumns,
 
   dependencyMap,
 
