@@ -1,18 +1,28 @@
-import { isArray, isUndefined, isFunction } from 'is-what'
+import { isArray, isUndefined, isFunction, isFullString, isBoolean, isPlainObject } from 'is-what'
 import pathToProp from 'path-to-prop'
 
 export default function schemaToQTableColumns (schema) {
   const schemaArray = !isArray(schema) ? [schema] : schema
   return schemaArray.map(blueprint => {
-    const { id, valueType, label, align: bpAlign, default: df } = blueprint
-    const align = !isUndefined(bpAlign) ? bpAlign : valueType === 'number' ? 'right' : 'left'
+    const {
+      id,
+      valueType,
+      type,
+      label,
+      align,
+      default: df,
+      sortable,
+      parseValue,
+      sort,
+      format,
+      headerClasses,
+      headerStyle,
+    } = blueprint
     const field = row => {
       const value = pathToProp(row, id)
-      const { parseValue } = row
       // todo: can I retrieve the EasyField context? should I?
-      const easyFieldContext = { formData: row }
-      // apply default value to make value sortable
-      // todo: should we trigger default value on isUndefined AND ''?
+      const easyFieldContext = { formData: row, fieldInput: () => {} }
+      // fieldInput has a chance to be triggered on `parseValue`, and thus needs to be added as fn to make sure it exists on the context but does nothing. We don't want to trigger fieldInput on sorting, therefore it must be an empty fn.
       const valueOrDefaultValue = !isUndefined(value)
         ? value
         : isFunction(df)
@@ -21,23 +31,29 @@ export default function schemaToQTableColumns (schema) {
       if (isFunction(parseValue)) return parseValue(valueOrDefaultValue, easyFieldContext)
       return valueOrDefaultValue
     }
-    const quasarColumnBlueprint = {
+    const quasarColumnConfig = {
       name: id,
       field,
       label,
-      align,
-      sortable: id !== 'id',
-
-      // set parseValue to undefined to prevent conflict with Quasar's way of formatting
-      // formatting is done in EasyCell!
-      // parseValue,
-
+      align: ['left', 'right', 'center'].includes(align)
+        ? align
+        : [valueType, type].includes('number')
+        ? 'right'
+        : 'left',
+      sortable: isBoolean(sortable) ? sortable : id !== 'id',
+      sort: isFunction(sort) ? sort : undefined,
+      format: isFunction(format) ? format : undefined,
+      headerClasses: [isArray, isPlainObject, isFullString].some(fn => fn(headerClasses))
+        ? headerClasses
+        : undefined,
+      headerStyle: [isArray, isPlainObject, isFullString].some(fn => fn(headerStyle))
+        ? headerStyle
+        : undefined,
       // not sure why i'd want to set these:
       // required,
-      // sort,
       // style,
       // classes,
     }
-    return quasarColumnBlueprint
+    return quasarColumnConfig
   })
 }

@@ -10,3 +10,7 @@ export const slots = {
   code: [require('./slots').default],
   string: [require('!!raw-loader!./slots').default],
 }
+export const computedFields = {
+  code: [require('./computedFields').default],
+  string: [require('!!raw-loader!./computedFields').default],
+}

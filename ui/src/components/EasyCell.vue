@@ -49,7 +49,7 @@ export default {
     mode: { type: String, category: 'easyFormProp' },
     fieldInput: { type: Function, category: 'easyFormProp' },
     // EasyField props that are used here:
-    component: { type: String },
+    component: { type: [String, Object, Function] },
     events: { type: Object, default: () => ({}), desc: `only 'click' is used for button fields` },
   },
   computed: {

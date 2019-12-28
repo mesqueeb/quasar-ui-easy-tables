@@ -79,6 +79,7 @@ const pagesEasyTable = [
   { title: 'Basics', path: '/basics' },
   { title: 'Editing', path: '/editing' },
   { title: 'Slots', path: '/slots' },
+  { title: 'Computed Fields', path: '/computedFields' },
 ]
 
 export default {
