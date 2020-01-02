@@ -1,5 +1,7 @@
 import { Dialog } from 'quasar'
-import DEasyForm from '../../components/DEasyForm.vue'
+import DialogWrapper from '../../components/DialogWrapper.vue'
+// For more info on this DialogWrapper see:
+// https://github.com/mesqueeb/quasar-ui-easy-tables/blob/master/ui/dev/src/components/DialogWrapper.vue
 
 const schemaColumns = [
   {
@@ -56,6 +58,7 @@ const schemaColumns = [
 ]
 const rows = [
   {
+    id: 'abc123',
     name: 'Luke',
     img:
       'https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=160',
@@ -69,18 +72,35 @@ const rows = [
 export default {
   rows,
   schemaColumns,
+  schemaGrid: schemaColumns,
   events: {
     'row-click': (event, rowData) => {
       Dialog.create({
-        component: DEasyForm,
+        // tell Quasar's Dialog plugin to use DialogWrapper.vue
+        component: DialogWrapper,
         parent: this,
-        // props forwarded to component
-        propsToPass: {
+        // tell DialogWrapper.vue to use an EasyForm
+        slotComponent: 'EasyForm',
+        // props bound to EasyForm via v-bind="slotProps"
+        slotProps: {
+          actionButtons: ['edit', 'cancel', 'save'],
           value: rowData,
           schema: schemaColumns,
           class: 'q-pa-lg',
           mode: 'edit',
         },
+        // events bound to EasyForm via v-on="slotEvents"
+        slotEvents: ({ hide }) => ({
+          cancel: hide,
+          save: ({ newData }) => {
+            const { id: rowId } = rowData
+            const rowToUpdate = rows.find(r => r.id === rowId)
+            Object.entries(newData).forEach(([fieldId, value]) => {
+              rowToUpdate[fieldId] = value
+            })
+            hide()
+          },
+        }),
       })
     },
   },

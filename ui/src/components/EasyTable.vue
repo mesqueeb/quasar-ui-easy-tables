@@ -64,6 +64,7 @@
           @click="e => onRowClick(e, gridItemProps.row)"
         >
           <EasyForm
+            :key="JSON.stringify(gridItemProps.row)"
             :value="gridItemProps.row"
             :id="gridItemProps.row.id"
             v-bind="gridEasyFormProps"
