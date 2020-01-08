@@ -7,7 +7,8 @@
       spread
       :options="[
         { label: 'v-slot:above-table', value: 0 },
-        { label: 'v-slot:top', value: 1 },
+        { label: 'v-slot:top-right', value: 1 },
+        { label: 'all top slots', value: 2 },
       ]"
     />
     <InfoCard
@@ -50,7 +51,7 @@
         v-on="exampleTables[pageValue.chosenExample].events"
         :filter="filter"
       >
-        <template v-slot:top>
+        <template v-slot:top-right>
           <QInput
             v-model="filter"
             outlined
@@ -64,6 +65,35 @@
           </QInput>
         </template>
       </EasyTable>
+      <EasyTable
+        v-if="chosenExampleInline === 2"
+        class="q-pa-md _interactive-preview"
+        :key="pageValue.chosenExample"
+        v-bind="exampleTables[pageValue.chosenExample]"
+        v-on="exampleTables[pageValue.chosenExample].events"
+        :filter="filter"
+      >
+        <template v-slot:above-nav-row>
+          <div class="_slot-preview">
+            < template v-slot:above-nav-row>< /template>
+          </div>
+        </template>
+        <template v-slot:top-left>
+          <div class="_slot-preview">
+            < template v-slot:top-left>< /template>
+          </div>
+        </template>
+        <template v-slot:top-right>
+          <div class="_slot-preview">
+            < template v-slot:top-right>< /template>
+          </div>
+        </template>
+        <template v-slot:above-table>
+          <div class="_slot-preview">
+            < template v-slot:above-table>< /template>
+          </div>
+        </template>
+      </EasyTable>
     </InfoCard>
   </q-page>
 </template>
@@ -73,6 +103,9 @@
 .easy-table-demo
   ._interactive-preview .easy-field__label
     font-weight: 100
+  ._slot-preview
+    padding: 1rem
+    border: thin solid goldenrod
 
 .page-form
   .ef-btn-toggle

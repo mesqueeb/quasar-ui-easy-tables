@@ -22,7 +22,7 @@
     "is-what": "^3.5.0",
     "merge-anything": "^2.4.4",
     "quasar-ui-component-info-card": "0.0.5",
-    "quasar-ui-easy-forms": "^1.0.2",
+    "quasar-ui-easy-forms": "^1.2.1",
     "raw-loader": "^4.0.0",
     "sort-anything": "^0.1.0"
   },

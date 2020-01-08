@@ -1,81 +1,86 @@
 <template>
-  <div class="easy-table">
-    <slot name="above-nav-row" />
-    <div class="easy-table__nav-row" v-if="title || cActionButtons.length">
-      <div class="easy-table__title">{{ title }}</div>
-      <EfBtn v-for="btn in cActionButtons" :key="btn.btnLabel" v-bind="btn" v-on="btn.events" />
-    </div>
-    <slot name="above-table" />
-    <q-table
-      class="easy-table__table"
-      v-bind="quasarProps"
-      :selected.sync="cSelected"
-      :pagination.sync="tablePagination"
+  <q-table
+    class="easy-table"
+    v-bind="quasarProps"
+    :selected.sync="cSelected"
+    :pagination.sync="tablePagination"
+  >
+    <template v-slot:top>
+      <slot name="above-nav-row" />
+      <div class="easy-table__nav-row" v-if="title || cActionButtons.length">
+        <slot name="top-left">
+          <div class="q-table__title">{{ title }}</div>
+        </slot>
+        <slot name="top-right">
+          <EfBtn v-for="btn in cActionButtons" :key="btn.btnLabel" v-bind="btn" v-on="btn.events" />
+        </slot>
+      </div>
+      <slot name="above-table" />
+    </template>
+    <!-- Pass on all scoped slots -->
+    <template
+      v-for="slot in Object.keys($scopedSlots).filter(slot => !slot.includes('top'))"
+      v-slot:[slot]="scope"
     >
-      <!-- Pass on all named slots -->
-      <slot v-for="slot in Object.keys($slots)" :name="slot" v-slot:[slot] />
-      <!-- Pass on all scoped slots -->
-      <template v-for="slot in Object.keys($scopedSlots)" v-slot:[slot]="scope">
-        <slot :name="slot" v-bind="scope"
-      /></template>
+      <slot :name="slot" v-bind="scope"
+    /></template>
 
-      <template v-slot:body="rowProps">
-        <!--
+    <template v-slot:body="rowProps">
+      <!--
           EasyRow.vue's only purpose is:
           (1) to create `EasyFormSimulatedContext`
           (2) to set up the fieldInput (@row-input) listener
           (3) add row classes; style and their respective props
         -->
-        <EasyRow
-          :q-table-row-props="rowProps"
-          :schema="schemaColumns"
-          :value="rowProps.row"
-          :id="rowProps.row.id"
-          :row-style="rowStyle"
-          :row-classes="rowClasses"
-          mode="raw"
-          @row-input="({ rowId, fieldId, value }) => onInputCell(rowId, fieldId, value)"
-          v-slot="EasyFormSimulatedContext"
+      <EasyRow
+        :q-table-row-props="rowProps"
+        :schema="schemaColumns"
+        :value="rowProps.row"
+        :id="rowProps.row.id"
+        :row-style="rowStyle"
+        :row-classes="rowClasses"
+        mode="raw"
+        @row-input="({ rowId, fieldId, value }) => onInputCell(rowId, fieldId, value)"
+        v-slot="EasyFormSimulatedContext"
+      >
+        <q-td auto-width v-if="quasarProps.selection">
+          <q-checkbox :dense="true" v-model="rowProps.selected" />
+        </q-td>
+        <q-td
+          auto-width
+          v-for="blueprint in schemaColumns"
+          :key="blueprint.id"
+          :props="rowProps"
+          @click.native="e => onRowClick(e, rowProps.row)"
         >
-          <q-td auto-width v-if="quasarProps.selection">
-            <q-checkbox :dense="true" v-model="rowProps.selected" />
-          </q-td>
-          <q-td
-            auto-width
-            v-for="blueprint in schemaColumns"
-            :key="blueprint.id"
-            :props="rowProps"
-            @click.native="e => onRowClick(e, rowProps.row)"
-          >
-            <!-- requires row, blueprint, value -->
-            <EasyCell
-              v-bind="merge(EasyFormSimulatedContext, blueprint)"
-              :value="pathToProp(EasyFormSimulatedContext.formData, blueprint.id)"
-              @input="val => onInputCell(rowProps.row.id, blueprint.id, val)"
-            />
-          </q-td>
-        </EasyRow>
-      </template>
-      <!-- Grid item -->
-      <template v-slot:item="gridItemProps">
-        <q-card
-          :class="flattenArray(['easy-table__grid-item', cardClass])"
-          :style="cardStyle"
-          @click="e => onRowClick(e, gridItemProps.row)"
-        >
-          <EasyForm
-            :key="JSON.stringify(gridItemProps.row)"
-            :value="gridItemProps.row"
-            :id="gridItemProps.row.id"
-            v-bind="gridEasyFormProps"
-            @field-input="
-              ({ id: fieldId, value }) => onInputCell(gridItemProps.row.id, fieldId, value)
-            "
+          <!-- requires row, blueprint, value -->
+          <EasyCell
+            v-bind="merge(EasyFormSimulatedContext, blueprint)"
+            :value="pathToProp(EasyFormSimulatedContext.formData, blueprint.id)"
+            @input="val => onInputCell(rowProps.row.id, blueprint.id, val)"
           />
-        </q-card>
-      </template>
-    </q-table>
-  </div>
+        </q-td>
+      </EasyRow>
+    </template>
+    <!-- Grid item -->
+    <template v-slot:item="gridItemProps">
+      <q-card
+        :class="flattenArray(['easy-table__grid-item', cardClass])"
+        :style="cardStyle"
+        @click="e => onRowClick(e, gridItemProps.row)"
+      >
+        <EasyForm
+          :key="JSON.stringify(gridItemProps.row)"
+          :value="gridItemProps.row"
+          :id="gridItemProps.row.id"
+          v-bind="gridEasyFormProps"
+          @field-input="
+            ({ id: fieldId, value }) => onInputCell(gridItemProps.row.id, fieldId, value)
+          "
+        />
+      </q-card>
+    </template>
+  </q-table>
 </template>
 
 <style lang="sass">
@@ -87,6 +92,11 @@
   flex-direction: column
   th
     white-space: pre
+  .q-table__top
+    display: flex
+    flex-wrap: nowrap
+    flex-direction: column
+    align-items: stretch
 .easy-table__nav-row
   min-height: 42px
   display: grid
@@ -95,17 +105,12 @@
   align-items: center
   grid-gap: $md
   grid-auto-flow: column
-  margin-bottom: $md
   grid-template-columns: 1fr
-.easy-table__search-row
-  margin-bottom: $md
 .easy-table__grid-item
   margin: $sm
   padding: $md
   .easy-field__sub-label
     display: none
-.easy-table__title
-  font-size: 20px
 </style>
 
 <script>
