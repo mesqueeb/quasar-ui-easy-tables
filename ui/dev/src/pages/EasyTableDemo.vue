@@ -12,7 +12,7 @@
       :style-classes-data="styleClassesData"
     >
       <EasyTable
-        class="q-pa-md _interactive-preview"
+        class="_interactive-preview"
         :key="pageValue.chosenExample"
         v-bind="exampleTables[pageValue.chosenExample]"
         v-on="exampleTables[pageValue.chosenExample].events"

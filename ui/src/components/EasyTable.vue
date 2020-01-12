@@ -5,13 +5,13 @@
     :selected.sync="cSelected"
     :pagination.sync="tablePagination"
   >
-    <template v-slot:top>
+    <template v-slot:top v-if="usesTopSlot">
       <slot name="above-nav-row" />
       <div class="easy-table__nav-row">
-        <slot name="top-left" v-if="title || !!$scopedSlots['top-left']">
+        <slot name="top-left">
           <div class="q-table__title" v-if="title">{{ title }}</div>
         </slot>
-        <slot name="top-right" v-if="cActionButtons.length || !!$scopedSlots['top-right']">
+        <slot name="top-right">
           <EfBtn v-for="btn in cActionButtons" :key="btn.btnLabel" v-bind="btn" v-on="btn.events" />
         </slot>
       </div>
@@ -259,6 +259,17 @@ Please note:
     },
   },
   computed: {
+    usesTopSlot () {
+      const { title, cActionButtons, $scopedSlots: slot } = this
+      return (
+        title ||
+        cActionButtons.length ||
+        slot['above-table'] ||
+        slot['above-nav-row'] ||
+        slot['top-left'] ||
+        slot['top-right']
+      )
+    },
     quasarProps () {
       return merge(this.$attrs, {
         // Quasar props with modified behavior:

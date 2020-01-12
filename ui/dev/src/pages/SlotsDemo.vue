@@ -23,7 +23,7 @@
     >
       <EasyTable
         v-if="chosenExampleInline === 0"
-        class="q-pa-md _interactive-preview"
+        class="_interactive-preview"
         :key="pageValue.chosenExample"
         v-bind="exampleTables[pageValue.chosenExample]"
         v-on="exampleTables[pageValue.chosenExample].events"
@@ -35,7 +35,7 @@
             outlined
             dense
             placeholder="Search for Lesson by title, topic, or subject"
-            class="q-mb-md"
+            class="q-my-md"
           >
             <template v-slot:prepend>
               <QIcon name="search" />
@@ -45,7 +45,7 @@
       </EasyTable>
       <EasyTable
         v-if="chosenExampleInline === 1"
-        class="q-pa-md _interactive-preview"
+        class="_interactive-preview"
         :key="pageValue.chosenExample"
         v-bind="exampleTables[pageValue.chosenExample]"
         v-on="exampleTables[pageValue.chosenExample].events"
@@ -67,7 +67,7 @@
       </EasyTable>
       <EasyTable
         v-if="chosenExampleInline === 2"
-        class="q-pa-md _interactive-preview"
+        class="_interactive-preview"
         :key="pageValue.chosenExample"
         v-bind="exampleTables[pageValue.chosenExample]"
         v-on="exampleTables[pageValue.chosenExample].events"
