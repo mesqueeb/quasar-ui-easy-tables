@@ -7,11 +7,11 @@
   >
     <template v-slot:top>
       <slot name="above-nav-row" />
-      <div class="easy-table__nav-row" v-if="title || cActionButtons.length">
-        <slot name="top-left">
-          <div class="q-table__title">{{ title }}</div>
+      <div class="easy-table__nav-row">
+        <slot name="top-left" v-if="title || !!$scopedSlots['top-left']">
+          <div class="q-table__title" v-if="title">{{ title }}</div>
         </slot>
-        <slot name="top-right">
+        <slot name="top-right" v-if="cActionButtons.length || !!$scopedSlots['top-right']">
           <EfBtn v-for="btn in cActionButtons" :key="btn.btnLabel" v-bind="btn" v-on="btn.events" />
         </slot>
       </div>
