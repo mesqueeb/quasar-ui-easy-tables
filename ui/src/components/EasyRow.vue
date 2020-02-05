@@ -1,7 +1,7 @@
 <template>
   <q-tr
     :props="qTableRowProps"
-    :class="['easy-row', `easy-row__${id}`, ...cRowClassesArray]"
+    :class="['easy-table__row', 'easy-row', `easy-row__${id}`, ...cRowClassesArray]"
     :style="cRowStyle"
   >
     <slot v-bind="easyFormSimulatedContext" />

@@ -14,3 +14,7 @@ export const computedFields = {
   code: [require('./computedFields').default],
   string: [require('!!raw-loader!./computedFields').default],
 }
+export const selection = {
+  code: [require('./selection').default],
+  string: [require('!!raw-loader!./selection').default],
+}

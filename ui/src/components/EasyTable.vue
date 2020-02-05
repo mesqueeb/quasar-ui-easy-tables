@@ -25,6 +25,14 @@
       <slot :name="slot" v-bind="scope"
     /></template>
 
+    <!-- <template v-slot:header="headerProps">
+      <q-tr :props="headerProps">
+        <q-th auto-width />
+        <q-th v-for="col in headerProps.cols" :key="col.name" :props="headerProps">
+          {{ col.label }}
+        </q-th>
+      </q-tr>
+    </template> -->
     <template v-slot:body="rowProps">
       <!--
           EasyRow.vue's only purpose is:
@@ -43,11 +51,12 @@
         @row-input="({ rowId, fieldId, value }) => onInputCell(rowId, fieldId, value)"
         v-slot="EasyFormSimulatedContext"
       >
-        <q-td auto-width v-if="quasarProps.selection">
-          <q-checkbox :dense="true" v-model="rowProps.selected" />
+        <q-td v-if="selectionMode" auto-width>
+          <div class="flex flex-center">
+            <q-checkbox :dense="true" v-model="rowProps.selected" />
+          </div>
         </q-td>
         <q-td
-          auto-width
           v-for="blueprint in schemaColumns"
           :key="blueprint.id"
           :props="rowProps"
@@ -65,9 +74,15 @@
     <!-- Grid item -->
     <template v-slot:item="gridItemProps">
       <q-card
-        :class="flattenArray(['easy-table__grid-item', cardClass])"
+        :class="
+          flattenArray([
+            'easy-table__grid-item',
+            gridItemProps.selected ? 'selected' : [],
+            cardClass,
+          ])
+        "
         :style="cardStyle"
-        @click="e => onRowClick(e, gridItemProps.row)"
+        @click="e => onRowClick(e, gridItemProps.row, 'grid', gridItemProps)"
       >
         <EasyForm
           :key="JSON.stringify(gridItemProps.row)"
@@ -109,8 +124,12 @@
 .easy-table__grid-item
   margin: $sm
   padding: $md
+  transition: all 200ms
   .easy-field__sub-label
     display: none
+  &.selected
+    background: #efefef
+    transform: scale(0.9)
 </style>
 
 <script>
@@ -259,6 +278,10 @@ Please note:
     },
   },
   computed: {
+    selectionMode () {
+      const { quasarProps } = this
+      return quasarProps.selection === 'single' || quasarProps.selection === 'multiple'
+    },
     usesTopSlot () {
       const { title, cActionButtons, $scopedSlots: slot } = this
       return (
@@ -364,7 +387,11 @@ Please note:
     tapDuplicate () {
       this.$emit('duplicate', this.cSelected)
     },
-    onRowClick (event, rowData) {
+    onRowClick (event, rowData, origin, gridItemProps) {
+      const { selectionMode } = this
+      if (origin === 'grid' && selectionMode) {
+        gridItemProps.selected = !gridItemProps.selected
+      }
       this.$emit('row-click', event, rowData)
     },
     onInputCell (rowId, colId, value) {

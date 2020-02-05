@@ -67,6 +67,16 @@ const rows = [
     birthdate: new Date(),
     trialsCompleted: [{ label: 'One', value: '1' }],
   },
+  {
+    id: 'def456',
+    name: 'Leia',
+    img:
+      'https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=160',
+    level: 80000,
+    darkSide: false,
+    birthdate: new Date('1990-01-01'),
+    trialsCompleted: [{ label: 'Two', value: '2' }],
+  },
 ]
 
 export default {
