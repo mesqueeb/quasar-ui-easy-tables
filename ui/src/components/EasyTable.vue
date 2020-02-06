@@ -264,7 +264,7 @@ Please note:
       innerSelected,
       innerLang,
       innerGrid,
-      tablePagination: {
+      defaultTablePagination: {
         rowsPerPage: 10,
       },
     }
@@ -281,6 +281,17 @@ Please note:
     selectionMode () {
       const { quasarProps } = this
       return quasarProps.selection === 'single' || quasarProps.selection === 'multiple'
+    },
+    tablePagination: {
+      get () {
+        return this.quasarProps.tablePagination || this.defaultTablePagination
+      },
+      set (newTablePagination) {
+        if (this.quasarProps.tablePagination) {
+          return this.$emit('update:table-pagination', newTablePagination)
+        }
+        this.defaultTablePagination = newTablePagination
+      },
     },
     usesTopSlot () {
       const { title, cActionButtons, $scopedSlots: slot } = this
