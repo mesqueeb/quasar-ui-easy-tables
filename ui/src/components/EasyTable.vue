@@ -3,7 +3,7 @@
     class="easy-table"
     v-bind="quasarProps"
     :selected.sync="cSelected"
-    :pagination.sync="tablePagination"
+    :pagination.sync="pagination"
   >
     <template v-slot:top v-if="usesTopSlot">
       <slot name="above-nav-row" />
@@ -264,7 +264,7 @@ Please note:
       innerSelected,
       innerLang,
       innerGrid,
-      defaultTablePagination: {
+      defaultPagination: {
         rowsPerPage: 10,
       },
     }
@@ -282,15 +282,15 @@ Please note:
       const { quasarProps } = this
       return quasarProps.selection === 'single' || quasarProps.selection === 'multiple'
     },
-    tablePagination: {
+    pagination: {
       get () {
-        return this.quasarProps.tablePagination || this.defaultTablePagination
+        return this.quasarProps.pagination || this.defaultPagination
       },
-      set (newTablePagination) {
-        if (this.quasarProps.tablePagination) {
-          return this.$emit('update:table-pagination', newTablePagination)
+      set (newPagination) {
+        if (this.quasarProps.pagination) {
+          return this.$emit('update:pagination', newPagination)
         }
-        this.defaultTablePagination = newTablePagination
+        this.defaultPagination = newPagination
       },
     },
     usesTopSlot () {
