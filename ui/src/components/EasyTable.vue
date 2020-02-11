@@ -78,10 +78,10 @@
           flattenArray([
             'easy-table__grid-item',
             gridItemProps.selected ? 'selected' : [],
-            cardClass,
+            evaluate(cardClass, gridItemProps),
           ])
         "
-        :style="cardStyle"
+        :style="evaluate(cardStyle, gridItemProps)"
         @click="e => onRowClick(e, gridItemProps.row, 'grid', gridItemProps)"
       >
         <EasyForm
@@ -383,6 +383,10 @@ Please note:
     },
   },
   methods: {
+    evaluate (prop, rowProps) {
+      if (!isFunction(prop)) return prop
+      return prop(rowProps.row, rowProps, this)
+    },
     flattenArray,
     pathToProp,
     merge,
