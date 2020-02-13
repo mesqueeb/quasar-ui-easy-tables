@@ -113,7 +113,6 @@
     flex-direction: column
     align-items: stretch
 .easy-table__nav-row
-  min-height: 42px
   display: grid
   justify-content: stretch
   align-content: start
