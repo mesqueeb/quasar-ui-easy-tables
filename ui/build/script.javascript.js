@@ -37,8 +37,8 @@ const builds = [
       },
     },
     build: {
-      // unminified: true,
-      minified: true,
+      unminified: true,
+      // minified: true,
     },
   },
   {
@@ -52,8 +52,8 @@ const builds = [
       },
     },
     build: {
-      // unminified: true,
-      minified: true,
+      unminified: true,
+      // minified: true,
     },
   },
   {

@@ -1,6 +1,6 @@
 {
   "name": "quasar-app-extension-easy-tables",
-  "version": "0.8.4",
+  "version": "0.8.5",
   "description": "Easily generate tables by only defining a \"schema\" object.",
   "author": "Luca Ban - Mesqueeb",
   "license": "MIT",
@@ -12,7 +12,7 @@
   "bugs": "https://github.com/mesqueeb/quasar-ui-easy-tables/issues",
   "homepage": "https://quasar-easy-tables.web.app",
   "dependencies": {
-    "quasar-ui-easy-tables": "^0.8.4"
+    "quasar-ui-easy-tables": "^0.8.5"
   },
   "engines": {
     "node": ">= 8.9.0",
