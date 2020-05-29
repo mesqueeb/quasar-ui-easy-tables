@@ -35,11 +35,11 @@
     </template> -->
     <template v-slot:body="rowProps">
       <!--
-          EasyRow.vue's only purpose is:
-          (1) to create `EasyFormSimulatedContext`
-          (2) to set up the fieldInput (@row-input) listener
-          (3) add row classes; style and their respective props
-        -->
+        EasyRow.vue's only purpose is:
+        (1) to create `EasyFormSimulatedContext` including the `fieldInput` function (required for EasyCells to make sure the schema's can access this function)
+        (2) to set up the @row-input listener which is to be triggered whenever `fieldInput` is executed
+        (3) add row classes; style and their respective props
+      -->
       <EasyRow
         :q-table-row-props="rowProps"
         :schema="schemaColumns"
@@ -48,7 +48,9 @@
         :row-style="rowStyle"
         :row-classes="rowClasses"
         mode="raw"
-        @row-input="({ rowId, fieldId, value }) => onInputCell(rowId, fieldId, value)"
+        @row-input="
+          ({ rowId, fieldId, value, origin }) => onInputCell(rowId, fieldId, value, origin)
+        "
         v-slot="EasyFormSimulatedContext"
       >
         <q-td v-if="selectionMode" auto-width>
@@ -66,7 +68,7 @@
           <EasyCell
             v-bind="merge(EasyFormSimulatedContext, blueprint)"
             :value="pathToProp(EasyFormSimulatedContext.formData, blueprint.id)"
-            @input="val => onInputCell(rowProps.row.id, blueprint.id, val)"
+            @input="(val, origin) => onInputCell(rowProps.row.id, blueprint.id, val, origin)"
           />
         </q-td>
       </EasyRow>
@@ -90,7 +92,8 @@
           :id="gridItemProps.row.id"
           v-bind="gridEasyFormProps"
           @field-input="
-            ({ id: fieldId, value }) => onInputCell(gridItemProps.row.id, fieldId, value)
+            ({ id: fieldId, value, origin }) =>
+              onInputCell(gridItemProps.row.id, fieldId, value, origin)
           "
         />
       </q-card>
@@ -408,8 +411,8 @@ Please note:
       }
       this.$emit('row-click', event, rowData)
     },
-    onInputCell (rowId, colId, value) {
-      this.$emit('input-cell', { rowId, colId, value })
+    onInputCell (rowId, colId, value, origin) {
+      this.$emit('input-cell', { rowId, colId, value, origin })
     },
   },
 }

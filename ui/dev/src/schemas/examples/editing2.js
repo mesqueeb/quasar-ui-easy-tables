@@ -102,7 +102,7 @@ export default {
             // props bound to EasyForm via v-bind="slotProps"
             slotProps: {
               actionButtons: ['edit', 'cancel', 'save'],
-              value: rowData,
+              value: formData,
               schema: schemaColumns,
               class: 'q-pa-lg',
               mode: 'edit',
@@ -111,7 +111,7 @@ export default {
             slotEvents: ({ hide }) => ({
               cancel: hide,
               save: ({ newData }) => {
-                const { id: rowId } = rowData
+                const { id: rowId } = formData
                 const rowToUpdate = rows.find(r => r.id === rowId)
                 Object.entries(newData).forEach(([fieldId, value]) => {
                   rowToUpdate[fieldId] = value

@@ -82,11 +82,12 @@ export default {
         return carry
       }, {})
       const formDataFlat = merge(dataFlatDefaults, copy(dataFlat))
-      const fieldInput = ({ id: fieldId, value }) =>
+      const fieldInput = ({ id: fieldId, value, origin }) =>
         this.$emit('row-input', {
           rowId: formId,
           fieldId,
           value,
+          origin,
         })
       return {
         // make sure formData is rebuild from "flat" to have the default value

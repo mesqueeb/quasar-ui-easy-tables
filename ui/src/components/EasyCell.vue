@@ -86,8 +86,12 @@ export default {
       get () {
         return this.value
       },
-      set (val) {
-        this.$emit('input', val)
+      /**
+       * @param {any} val
+       * @param {undefined | 'default'} origin
+       */
+      set (val, origin) {
+        this.$emit('input', val, origin)
       },
     },
   },
