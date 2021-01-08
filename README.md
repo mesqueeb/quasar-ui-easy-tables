@@ -1,13 +1,16 @@
-# Quasar Easy Tables 🪑 (ノಠ益ಠ)ノ彡┻━┻
+Quasar Easy Tables 🪑 (ノಠ益ಠ)ノ彡┻━┻
 
-<img src="https://img.shields.io/npm/v/quasar-ui-easy-tables.svg?label=quasar-ui-easy-tables">
-<img src="https://img.shields.io/npm/v/quasar-app-extension-easy-tables.svg?label=quasar-app-extension-easy-tables">
+New version:
 
-- Demo: [quasar-easy-tables.web.app](http://quasar-easy-tables.web.app)
+# Blitzar released! 🎉 
 
-# Structure
-* [/ui](ui) - standalone npm package
-* [/app-extension](app-extension) - Quasar app extension
+Quasar Easy Forms & Tables was upgraded to become much more powerful!
+
+The new version is called **Blitzar**
+
+- see blog post here: https://lucaban.medium.com/better-faster-vue-forms-with-blitzar-a0d71258a3bb
+- see documentation here: https://blitzar.cycraft.co
+- see the upgrade guide here: https://github.com/CyCraft/blitzar/releases/tag/v0.0.14
 
 # Support
 
